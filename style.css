@@ -11,3 +11,5 @@
 .application-review{overflow-anchor:none;scroll-behavior:auto;overscroll-behavior:contain}
 
 .music-switch{position:fixed;z-index:110;left:25px;bottom:78px;padding:10px 16px;background:#172849;border:1px solid #477aff66;border-radius:9px;font-size:12px;max-width:calc(100vw - 24px)}@media(max-width:600px){.music-switch{left:12px;bottom:60px;font-size:10px}}
+
+.sound-switch,.music-switch{z-index:130;pointer-events:auto}
