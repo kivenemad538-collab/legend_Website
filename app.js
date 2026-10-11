@@ -215,19 +215,10 @@ function renderPublic(){
   }
 
   const team=Array.isArray(pub.teamMembers)?pub.teamMembers:[];
+  const teamRanks=['Founder','Hight Mangment','LE Team'];
+  function displayRank(rank){const key=String(rank||'').trim().toLowerCase().replace(/[^a-z]/g,'');if(['owner','founder','cofounder'].includes(key))return 'Founder';if(['hightmangment','highmanagement','hightmanagement','manager','management'].includes(key))return 'Hight Mangment';return 'LE Team';}
   if($('#teamGrid')){
-    $('#teamGrid').innerHTML=team.length?team.map((m,i)=>`
-      <article class="team-card" style="--team-delay:${Math.min(i,8)*45}ms">
-        <div class="team-photo">
-          <img src="${esc(m.image||logoSrc)}" alt="${esc(m.name||'Legend Team')}">
-          <span>${String(i+1).padStart(2,'0')}</span>
-        </div>
-        <div class="team-info">
-          <small>LEGEND TEAM</small>
-          <h3>${esc(m.name||'')}</h3>
-          <b>${esc(m.rank||'Team')}</b>
-        </div>
-      </article>`).join(''):'<div class="notice team-empty">لسه مفيش أعضاء مضافين في فريق الموقع.</div>';
+    $('#teamGrid').innerHTML=teamRanks.map((rank,group)=>{const members=team.filter(m=>displayRank(m.rank)===rank).sort((a,b)=>(a.order||0)-(b.order||0));return `<section class="team-rank-group"><div class="team-rank-heading"><span>0${group+1}</span><h3>${rank}</h3><small>${members.length} أعضاء</small></div><div class="team-rank-cards">${members.length?members.map(m=>`<article class="team-card"><div class="team-photo"><img src="${esc(m.image||logoSrc)}" alt="${esc(m.name||'Legend Team')}" loading="lazy" decoding="async"></div><div class="team-info"><h3>${esc(m.name||'')}</h3><b>${rank}</b></div></article>`).join(''):'<p class="team-group-empty">لم يتم إضافة أعضاء لهذه الرتبة بعد.</p>'}</div></section>`}).join('');
   }
 
   const news=Array.isArray(pub.settings.news)?pub.settings.news:[];
@@ -530,10 +521,10 @@ async function renderAdmin(){
       <div class="card admin-public-team-card">
         <div class="admin-card-kicker">PUBLIC TEAM</div>
         <h3>فريق Legend الظاهر في الموقع</h3>
-        <p><b>ده منفصل تمامًا عن Admin / Manager / Owner.</b> الشخص هنا للعرض فقط، والرتبة بتكتبها بنفسك ومش بتديه أي صلاحيات.</p>
+        <p><b>ده منفصل تمامًا عن Admin / Manager / Owner.</b> اختار رتبة الشخص المعروضة في صفحة الفريق.</p>
         <form id="publicTeamForm" class="form-grid">
           <div class="field"><input name="name" placeholder="اسم الشخص" required></div>
-          <div class="field"><input name="rank" placeholder="الرتبة المكتوبة في الموقع" required></div>
+          <div class="field"><label>الرتبة</label><select name="rank" required><option value="Founder">Founder</option><option value="Hight Mangment">Hight Mangment</option><option value="LE Team">LE Team</option></select></div>
           <div class="field full"><input name="image" placeholder="رابط الصورة" required></div>
           <div class="field"><input name="order" type="number" value="${(st.teamMembers||[]).length+1}" min="0" placeholder="الترتيب"></div>
           <button class="btn primary" type="submit">إضافة للفريق</button>
