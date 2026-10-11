@@ -27,9 +27,12 @@
   <link rel="stylesheet" href="style.css?v=legend-2">
 <link rel="stylesheet" href="store.css?v=3">
 <link rel="stylesheet" href="legend-design.css?v=4">
+<link rel="stylesheet" href="legend-cinema.css?v=5">
 </head>
 
 <body>
+<div class="scroll-meter" aria-hidden="true"></div>
+<button id="cinemaSound" class="sound-switch" type="button" aria-pressed="false">الصوت: مغلق ◌</button>
   <div id="cityBackdrop" class="city-backdrop" aria-hidden="true">
     <div id="cityPhoto" class="city-photo"></div>
     <div class="city-haze"></div>
@@ -56,76 +59,22 @@
     </div>
   </header>
 
-  <a class="turbo-banner" href="https://discord.gg/tTDwVP5sE" target="_blank" rel="noopener" aria-label="دخول ديسكورد Legend Roleplay">
-    <img src="turbo-banner.gif?v=24" alt="Legend Roleplay Discord Banner">
-  </a>
-
   <main>
     
-    <section id="home" class="hero lcrp-hero">
-      <div class="hero-copy lcrp-copy">
-        <div class="hero-badges">
-          <span>SEASON 2.0</span>
-          <span>LEGEND RP</span>
-        </div>
-        <h1>مدينة واحدة.<br><em>قصص مالهاش حدود.</em></h1>
-        <p>ابدأ بشخصيتك، اختار طريقك، وسيب بصمتك في Legend. قدّم للمدينة، تابع طلبك، وجهّز تجربتك من مكان واحد.</p>
-
-        <div class="hero-actions hero-actions-discord">
-          <a class="btn primary discord-community-btn" href="#apply">ابدأ قصتك</a>
-          <a class="btn ghost" href="#rules">القوانين</a>
-          <a class="btn ghost" href="#news">الأخبار</a>
-        </div>
-
-        <div class="server-state lcrp-state">
-          <i></i>
-          <span id="applyState">جاري الاتصال بـ Legend...</span>
-        </div>
-      </div>
-
-      <div class="hero-visual lcrp-visual" id="turboTiltCard">
-        <div class="tilt-glare" aria-hidden="true"></div>
-
-        <div class="live-card">
-          <small>LIVE PLAYERS</small>
-          <strong>0/32</strong>
-          <span>LEGEND ROLEPLAY</span>
-        </div>
-
-        <div class="turbo-core lcrp-core">
-          <div class="core-ring"></div>
-          <div class="core-text">
-            <img class="core-logo" src="turbo-logo.png?v=29" alt="Legend" data-turbo-logo>
-          </div>
-        </div>
-
-        <div class="floating-chip chip-a"></div>
-        <div class="floating-chip chip-b"></div>
-        <div class="floating-chip chip-c"></div>
-      </div>
-
-      <div class="hero-server-strip lcrp-server-strip">
-        <div><small>السيرفر</small><b>LEGEND RP</b></div>
-        <span></span>
-        <div><small>الحالة</small><b class="status-live">متصل</b></div>
-        <span></span>
-        <div><small>عدد اللاعبين</small><b>0/32</b></div>
-        <span></span>
-        <div><small>النظام</small><b>SERIOUS RP</b></div>
-        <span></span>
-        <div><small>التحديث</small><b>03:19 ص</b></div>
-      </div>
-
-      <div class="hero-ticker" aria-hidden="true">
-        <div>
-          <span>قصتك تبدأ هنا</span><i></i>
-          <span>LEGEND ROLEPLAY</span><i></i>
-          <span>SEASON 2.0</span><i></i>
-          <span>ROLEPLAY</span><i></i>
-          <span>قصتك تبدأ هنا</span>
-        </div>
-      </div>
+<section id="home" class="hero cinema-hero">
+<video id="cityFilm" class="cinema-film" autoplay muted loop playsinline preload="metadata" poster="city-poster.jpg" aria-hidden="true"><source src="legend-city.mp4" type="video/mp4"></video>
+<div class="cinema-shade"></div><div class="cinema-grain"></div>
+<div class="cinema-label">LEGEND / A WORLD OF YOUR OWN <span>01 — THE CITY</span></div>
+<div class="hero-copy"><div class="hero-badges"><span>ARABIC ROLEPLAY</span><span>LEGEND RP</span></div><h1>مش مجرد مدينة.<br><em>دي حكايتك.</em></h1><p>كل شارع بداية. كل قرار بيغيّر القصة.<br>ادخل عالم Legend واكتب اسمك بطريقتك.</p><div class="hero-actions"><a class="btn primary" href="#apply">ابدأ حكايتك ↖</a><a class="btn ghost" href="https://discord.gg/tTDwVP5sE" target="_blank" rel="noopener">انضم للديسكورد</a></div><div class="server-state"><i></i><span id="applyState">جاري الاتصال بـ Legend...</span></div></div>
+<div class="cinema-word" aria-hidden="true">LEGEND</div><a class="scroll-cue" href="#about">اكتشف المدينة <span>↓</span></a><div class="cinema-bottom">YOUR CHARACTER. YOUR CHOICES. YOUR LEGACY.<span>LEGEND ROLEPLAY © 2026</span></div>
+</section>
+<section class="city-intro"><small>WELCOME TO YOUR NEXT LIFE</small><h2>هنا مش بتلعب شخصية.<br><span>هنا بتعيش قصة.</span></h2><a href="#jobs">اختار طريقك ↙</a></section>
+    <section id="about" class="section reveal-section">
+      <div class="section-head"><span>01</span><div><small>ABOUT LEGEND</small><h2>من نحن</h2></div></div>
+      <div class="section-lead">مكان معمول عشان القصة تبقى أهم من الأرقام. كل نظام موجود لخدمة الرول بلاي، مش العكس.</div>
+      <div class="about-grid"><article class="card big"><span class="blue-label">LEGEND ROLEPLAY</span><p id="aboutText">Legend RP سيرفر رول بلاي عربي يهتم بجودة السيناريو والتفاعل بين اللاعبين.</p></article><article class="card"><b>سيناريوهات للجميع</b><p>مش لازم تستنى حدث. المدينة معمولة عشان كل لاعب يبني قصة ويتفاعل مع باقي الشخصيات.</p></article><article class="card"><b>نظام تقديم واضح</b><p>تابع تقديمك من الموقع، وشوف القرار وموعد المقابلة من نفس حساب Discord.</p></article></div>
     </section>
+
 
     <section class="gate-zone reveal-section" aria-label="بوابة القوانين">
       <div class="gate-zone-head">
@@ -159,20 +108,13 @@
     </section>
 
 
-    <section id="about" class="section reveal-section">
-      <div class="section-head"><span>01</span><div><small>ABOUT LEGEND</small><h2>من نحن</h2></div></div>
-      <div class="section-lead">مكان معمول عشان القصة تبقى أهم من الأرقام. كل نظام موجود لخدمة الرول بلاي، مش العكس.</div>
-      <div class="about-grid"><article class="card big"><span class="blue-label">LEGEND ROLEPLAY</span><p id="aboutText">Legend RP سيرفر رول بلاي عربي يهتم بجودة السيناريو والتفاعل بين اللاعبين.</p></article><article class="card"><b>سيناريوهات للجميع</b><p>مش لازم تستنى حدث. المدينة معمولة عشان كل لاعب يبني قصة ويتفاعل مع باقي الشخصيات.</p></article><article class="card"><b>نظام تقديم واضح</b><p>تابع تقديمك من الموقع، وشوف القرار وموعد المقابلة من نفس حساب Discord.</p></article></div>
-    </section>
-
-
     <section id="team" class="section reveal-section team-section">
       <div class="section-head">
         <span>02</span>
         <div><small>LEGEND TEAM</small><h2>خلف المدينة</h2></div>
-        <p>فريق الموقع العام، بعيد تمامًا عن صلاحيات لوحة التحكم.</p>
+        <p>الناس اللي بتصنع التجربة.</p>
       </div>
-      <div class="section-lead compact">الإدارة تقدر تضيف الأشخاص هنا وتكتب رتبتهم يدويًا. رتبة الشخص هنا للعرض فقط ومش بتدي أي صلاحية للموقع.</div>
+      <div class="section-lead compact">أشخاص بيجمعهم هدف واحد: مدينة تستحق قصتك.</div>
       <div id="teamGrid" class="team-grid"><div class="loading-box"></div></div>
     </section>
 
@@ -249,5 +191,6 @@
   <script src="config.js?v=legend-2"></script><script src="app.js?v=legend-2"></script>
 <script src="store.js?v=3"></script>
 <script src="legend-design.js?v=4"></script>
+<script src="legend-cinema.js?v=5"></script>
 </body>
 </html>
