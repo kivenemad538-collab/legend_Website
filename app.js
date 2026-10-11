@@ -197,10 +197,10 @@ function renderPublic(){
   $('#aboutText').textContent=pub.settings.aboutText;
   renderRules(pub.settings.rules || []);
 
-  const logoSrc=String(pub.settings.logoImage||'legend-logo-fast.png?v=10').trim()||'legend-logo-fast.png?v=10';
+  const logoSrc=String(pub.settings.logoImage||'legend-logo.webp?v=15').trim()||'legend-logo.webp?v=15';
   // Keep the local logo visible while an optional custom URL loads in the background.
   const logoUrl=new URL(logoSrc,location.href).href;
-  document.querySelectorAll('[data-turbo-logo]').forEach(img=>{if(img.src===logoUrl)return;const preload=new Image();preload.onload=()=>{img.src=logoUrl;};preload.src=logoUrl;});
+  const logoTargets=[...document.querySelectorAll('[data-turbo-logo]')].filter(img=>img.src!==logoUrl);if(logoTargets.length){const preload=new Image();preload.decoding='async';preload.onload=()=>logoTargets.forEach(img=>{img.src=logoUrl;});preload.src=logoUrl;}
 
   const city=String(pub.settings.cityBackground||'').trim();
   const cityPhoto=$('#cityPhoto');
@@ -225,7 +225,7 @@ function renderPublic(){
   if($('#newsGrid'))$('#newsGrid').innerHTML=news.length?[...news].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).map(n=>`<article class="news-card"><small>LEGEND NEWS</small><h3>${esc(n.title)}</h3><p>${esc(n.body)}</p><time>${new Date(n.createdAt||Date.now()).toLocaleDateString('ar-EG')}</time></article>`).join(''):'<div class="notice">لا توجد أخبار مضافة حاليًا.</div>';
   $('#creatorGrid').innerHTML=pub.creators.length?pub.creators.map(c=>`<a class="creator" href="${esc(c.url)}" target="_blank" rel="noopener"><img src="${esc(c.image||'')}" alt="${esc(c.name)}"><div class="meta"><h3>${esc(c.name)}</h3>${c.isLive?'<span class="live">● LIVE</span>':'<span class="offline">OFFLINE</span>'}</div></a>`).join(''):'<div class="notice">هيتم إضافة صناع المحتوى من لوحة التحكم.</div>';
   $('#applyState').textContent=pub.settings.applicationsOpen?'التقديم مفتوح الآن':'التقديم مغلق حاليًا';
-  renderJobs();
+  renderJobs();window.legendCreatorPublic?.();
 }
 function syncApplicationLabels(){
   const hasApplication=!!(token&&me?.latest);
@@ -455,7 +455,7 @@ async function renderAdmin(){
     <div class="admin-topline"><div><span>LEGEND CONTROL</span><h3>لوحة التحكم</h3></div><div class="admin-viewer">${viewerLabel}</div></div>
     <div class="admin-summary"><div class="admin-stat"><b>${st.applications.length}</b><span>كل التقديمات</span></div><div class="admin-stat"><b>${st.applications.filter(a=>a.status==='pending').length}</b><span>قيد المراجعة</span></div><div class="admin-stat"><b>${st.applications.filter(a=>['pre_accepted','voice_review'].includes(a.status)).length}</b><span>المرحلة الثانية</span></div><div class="admin-stat"><b>${st.applications.filter(a=>a.status==='voice_passed').length}</b><span>مقبولين نهائيًا</span></div></div>
     <div class="admin-control-grid">
-      <div class="card admin-settings-card"><h3>حالة التقديم</h3><p>الحالة الحالية: <b>${st.settings.applicationsOpen?'مفتوح':'مغلق'}</b></p><button class="${st.settings.applicationsOpen?'danger':'btn primary'}" onclick="toggleApps(${!st.settings.applicationsOpen})">${st.settings.applicationsOpen?'قفل التقديم':'فتح التقديم'}</button></div>
+      <div class="card admin-settings-card whitelist-admin"><small>WHITELIST CONTROL</small><h3>فتح وقفل تقديم الوايت ليست</h3><p>الحالة الحالية: <b>${st.settings.applicationsOpen?'مفتوح':'مغلق'}</b></p><button class="${st.settings.applicationsOpen?'danger':'btn primary'}" onclick="toggleApps(${!st.settings.applicationsOpen})">${st.settings.applicationsOpen?'قفل التقديم':'فتح التقديم'}</button></div>
       <div class="card admin-settings-card job-access-admin">
         <div class="admin-card-kicker">JOB APPLICATION CONTROL</div>
         <h3>فتح وقفل تقديمات الوظائف</h3>
@@ -570,6 +570,7 @@ async function renderAdmin(){
     typeSel?.addEventListener('change',sync);sync();
   }
   if(st.viewer?.isManager && $('#panelAdminForm'))$('#panelAdminForm').onsubmit=addPanelAdmin;
+  window.legendCreatorAdmin?.();window.dispatchEvent(new Event('legend:admin-ready'));
 }
 async function addPanelAdmin(e){
   e.preventDefault();

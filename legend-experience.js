@@ -1,13 +1,13 @@
 (()=>{
  const titles={home:'المدينة',about:'عن Legend',jobs:'الوظائف',apply:'تصريح دخول المدينة',store:'المتجر والطلبات',rules:'دليل المدينة',news:'أخبار المدينة',team:'فريق Legend',creators:'صناع المحتوى',admin:'مركز الإدارة'};
  const main=document.querySelector('main'),heading=document.getElementById('pageHeading'),film=document.getElementById('cityFilm');
- function route(){let id=location.hash.slice(1);if(!titles[id])id='home';if(id==='admin'&&document.getElementById('admin').classList.contains('hidden'))id='home';
+ function route(){let id=location.hash.slice(1);const homeAnchor=['cityJourney','cityPaths','cityHub'].includes(id)?id:null;if(!titles[id])id='home';if(id==='admin'&&document.getElementById('admin').classList.contains('hidden'))id='home';
  document.body.classList.toggle('hub-view',id==='home');document.body.dataset.page=id;
- main.querySelectorAll(':scope > section').forEach(s=>{const visible=id==='home'?['home','cityHub'].includes(s.id):s.id===id;s.classList.toggle('route-hidden',!visible);if(visible){s.classList.remove('page-in');requestAnimationFrame(()=>s.classList.add('page-in'));}});
+ main.querySelectorAll(':scope > section').forEach(s=>{const visible=id==='home'?['home','cityJourney','cityPaths','legendNetwork','cityHub'].includes(s.id):s.id===id;s.classList.toggle('route-hidden',!visible);if(visible){s.classList.remove('page-in');requestAnimationFrame(()=>s.classList.add('page-in'));}});
  heading.hidden=id==='home';document.getElementById('pageName').textContent=titles[id];document.title=titles[id]+' • LEGEND';
  document.querySelectorAll('#nav a').forEach(a=>{if(a.hash==='#'+id)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});document.getElementById('nav').classList.remove('open');
- if(id!=='home')film.pause();else if(!matchMedia('(prefers-reduced-motion:reduce)').matches&&document.getElementById('filmToggle').getAttribute('aria-pressed')!=='true')film.play().catch(()=>{document.getElementById('filmStart').hidden=false});
- scrollTo({top:0,behavior:'instant'});
+ if(id!=='home')film.pause();else window.legendResumeFilm?.();
+ if(homeAnchor)requestAnimationFrame(()=>document.getElementById(homeAnchor).scrollIntoView({behavior:'smooth',block:'start'}));else scrollTo({top:0,behavior:'instant'});
  }
  addEventListener('hashchange',route);route();
  let refreshing=false;
@@ -20,7 +20,7 @@
  const tabs=document.createElement('div');tabs.className='admin-tabs';tabs.setAttribute('role','group');tabs.setAttribute('aria-label','أقسام الإدارة');
  const labels={requests:'التقديمات',access:'الوظائف والمواعيد',content:'الأخبار والفريق',brand:'الهوية والإعدادات',staff:'الإدارة والصلاحيات'};
  const cards=[...dashboard.querySelectorAll('.admin-grid>.card,.staff-directory-card')];
- const group=c=>c.classList.contains('applications-card')?'requests':c.classList.contains('job-access-admin')||c.classList.contains('admin-workshops-card')||c.querySelector('#slotForm')?'access':c.classList.contains('admin-public-team-card')||c.querySelector('#newsForm')||c.querySelector('#creatorForm')?'content':c.classList.contains('manager-only-card')||c.classList.contains('staff-directory-card')?'staff':'brand';
+ const group=c=>c.classList.contains('applications-card')||c.classList.contains('creator-admin-card')?'requests':c.classList.contains('whitelist-admin')||c.classList.contains('job-access-admin')||c.classList.contains('admin-workshops-card')||c.querySelector('#slotForm')?'access':c.classList.contains('admin-public-team-card')||c.querySelector('#newsForm')||c.querySelector('#creatorForm')?'content':c.classList.contains('manager-only-card')||c.classList.contains('staff-directory-card')?'staff':'brand';
  function select(k){adminTab=k;cards.forEach(c=>c.hidden=group(c)!==k);tabs.querySelectorAll('button').forEach(b=>{b.classList.toggle('active',b.dataset.tab===k);b.setAttribute('aria-pressed',String(b.dataset.tab===k))});}
  for(const [k,v]of Object.entries(labels)){const b=document.createElement('button');b.type='button';b.textContent=v;b.dataset.tab=k;b.onclick=()=>select(k);tabs.append(b)}
  const anchor=dashboard.querySelector('.admin-grid');if(anchor)anchor.before(tabs);else dashboard.prepend(tabs);select(adminTab);
