@@ -127,7 +127,7 @@ async function api(path,opt={}){
   if(!API_CONFIGURED) throw Object.assign(new Error('API_NOT_CONFIGURED'),{status:0});
   const h={'content-type':'application/json',...(opt.headers||{})};
   if(token)h.authorization=`Bearer ${token}`;
-  const timeout=AbortSignal.timeout(12000);
+  const timeout=AbortSignal.timeout(path==='/api/public'||path==='/api/me'||path.startsWith('/api/store')&&(!opt.method||opt.method==='GET')?7000:12000);
   const signal=opt.signal ? AbortSignal.any([opt.signal,timeout]) : timeout;
   const r=await fetch(API+path,{...opt,headers:h,signal});
   const j=await r.json().catch(()=>({}));
@@ -161,18 +161,25 @@ async function init(){
     renderOffline();
     return;
   }
+  // Public content can paint immediately; refresh it before enabling submissions.
+  try{const cached=JSON.parse(sessionStorage.getItem('legend_public_cache')||'null');if(cached&&Date.now()-cached.at<600000){pub=cached.data;renderPublic();$('#applyState').textContent='جاري تحديث حالة التقديم...';}}catch{}
+  const accountRequest=token?api('/api/me').then(data=>({data})).catch(error=>({error})):Promise.resolve(null);
   try{
-    pub=await api('/api/public');
-    renderPublic();
+    pub=await api('/api/public');renderPublic();
+    try{sessionStorage.setItem('legend_public_cache',JSON.stringify({at:Date.now(),data:pub}));}catch{}
   }catch(e){
-    renderOffline('تعذر تحميل بيانات التقديم. جرّب تحديث الصفحة، ولو استمرت المشكلة راجع اتصال المتصفح بـ Railway.');
+    pub=null;renderOffline('تعذر الاتصال بخدمة التقديم. جرّب إعادة الاتصال.');
+    $('#applyBox').insertAdjacentHTML('beforeend','<button type="button" class="btn primary" onclick="init()">إعادة الاتصال</button>');
     return;
   }
+  const account=await accountRequest;
+  if(account?.data){me=account.data;renderMe();}
+  else if(account?.error){
+    if(account.error.status===401){localStorage.removeItem('turbo_token');token='';renderApply();}
+    else{$('#applyBox').innerHTML='<div class="notice bad">تعذر تحميل حسابك. بياناتك محفوظة، اضغط لإعادة الاتصال.</div><button type="button" class="btn primary" onclick="init()">إعادة الاتصال</button>';}
+  }else{renderApply();renderStatus();}
+  window.dispatchEvent(new Event('legend:data-ready'));
 
-  if(token){
-    try{me=await api('/api/me');renderMe(); if(!me?.isAdmin && location.hash==='#admin') history.replaceState(null,'',location.pathname+location.search+'#home')}
-    catch{localStorage.removeItem('turbo_token');token='';renderApply();renderStatus()}
-  }else{renderApply();renderStatus()}
 }
 
 function renderOffline(msg='الموقع جاهز، لكن رابط Railway لسه محتاج يتضاف في config.js.'){
@@ -180,6 +187,8 @@ function renderOffline(msg='الموقع جاهز، لكن رابط Railway لس
   $('#aboutText').textContent='Legend RP هو سيرفر رول بلاي عربي يهتم بالسيناريوهات وجودة التجربة وتفاعل اللاعبين.';
   $('#creatorGrid').innerHTML='<div class="notice">صناع المحتوى هيظهروا هنا بعد اتصال الموقع بالبوت.</div>';if($('#teamGrid'))$('#teamGrid').innerHTML='<div class="notice">فريق Legend هيظهر هنا بعد اتصال الموقع.</div>';
   renderRules([]);
+  $('#jobsGrid').innerHTML='<div class="notice">الوظائف هتظهر بعد استعادة الاتصال.</div>';
+  $('#newsGrid').innerHTML='<div class="notice">تعذر تحميل الأخبار حاليًا.</div>';
   $('#applyBox').innerHTML=`<div class="notice bad">${esc(msg)}</div><br><button class="discord-btn" onclick="oauthLogin()">تسجيل دخول Discord</button>`;
   $('#statusBox').innerHTML='<div class="notice">بعد تسجيل الدخول هتشوف حالة تقديمك هنا.</div>';
 }
@@ -246,6 +255,7 @@ function renderMe(){renderJobs();
   renderApply();renderStatus();
 }
 function renderApply(){
+  if(!pub?.settings){return;}
   syncApplicationLabels();
   const box=$('#applyBox');
   if(!token){
@@ -269,6 +279,7 @@ function renderApply(){
 function roleCards(){return CHARACTER_TYPES.map(c=>`<button type="button" class="character-card" onclick="chooseCharacter('${c.id}')"><div class="character-visual character-${c.id}"><span>${c.icon}</span><i></i></div><div class="character-meta"><small>${c.sub}</small><b>${c.name}</b><p>${c.desc}</p></div><em>اختيار</em></button>`).join('')}
 window.openApplicationPortal=openApplicationPortal;
 function openApplicationPortal(){
+  if(!pub?.settings){toast('استنى تحميل بيانات التقديم أو اضغط إعادة الاتصال.');return;}
   if(!token){oauthLogin();return}
   auditEvent('application_portal_open',{canApply:!!me?.canApply,status:me?.latest?.status||null});
   const portal=$('#applicationPortal');
@@ -732,219 +743,8 @@ window.oauthLogin=oauthLogin;
 init();
 
 
-// v8: 3D hero + robust drag-to-rules (mouse, touch, pointer, click, keyboard)
-(function initTurboMotionV8(){
-  const card=document.getElementById('turboTiltCard');
-  if(card && window.matchMedia('(pointer:fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    let frame=0;
-    const setTilt=(x,y)=>{const r=card.getBoundingClientRect();const px=Math.max(0,Math.min(1,(x-r.left)/r.width));const py=Math.max(0,Math.min(1,(y-r.top)/r.height));const ry=(px-.5)*9;const rx=(.5-py)*7;cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{card.style.setProperty('--rx',rx.toFixed(2)+'deg');card.style.setProperty('--ry',ry.toFixed(2)+'deg');card.style.setProperty('--mx',(px*100).toFixed(1)+'%');card.style.setProperty('--my',(py*100).toFixed(1)+'%')})};
-    card.addEventListener('pointerenter',()=>card.classList.add('tilting'));
-    card.addEventListener('pointermove',e=>setTilt(e.clientX,e.clientY));
-    card.addEventListener('pointerleave',()=>{card.classList.remove('tilting');card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');card.style.setProperty('--mx','50%');card.style.setProperty('--my','50%')});
-  }
-
-  const track=document.getElementById('rulesDragTrack');
-  const thumb=document.getElementById('rulesDragThumb');
-  if(!track||!thumb)return;
-  let dragging=false,startX=0,startDrag=0,current=0,max=0,pointerId=null;
-  const recalc=()=>{
-    const cs=getComputedStyle(thumb);
-    const left=parseFloat(cs.left)||0;
-    const rightPad=left;
-    max=Math.max(0,track.clientWidth-thumb.offsetWidth-left-rightPad);
-  };
-  const setDrag=v=>{recalc();current=Math.max(0,Math.min(max,v));track.style.setProperty('--drag',current+'px');track.setAttribute('aria-valuenow',String(max?Math.round(current/max*100):0))};
-  const openRules=()=>{current=max;track.style.setProperty('--drag',max+'px');track.setAttribute('aria-valuenow','100');track.classList.add('completed');if(navigator.vibrate)navigator.vibrate(25);setTimeout(()=>{window.__turboUnlockRules?.();location.hash='rules';document.getElementById('rules')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{track.classList.remove('completed');setDrag(0)},950)},180)};
-  const finish=()=>{if(!dragging)return;dragging=false;track.classList.remove('dragging');recalc();if(max&&current/max>=.72)openRules();else setDrag(0)};
-  const begin=(clientX,id)=>{recalc();dragging=true;pointerId=id??null;track.classList.add('dragging');startX=clientX;startDrag=current};
-
-  thumb.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;begin(e.clientX,e.pointerId);thumb.setPointerCapture?.(e.pointerId);e.preventDefault()});
-  track.addEventListener('pointerdown',e=>{if(thumb===e.target||thumb.contains(e.target))return;if(e.button!==undefined&&e.button!==0)return;const r=track.getBoundingClientRect();setDrag(e.clientX-r.left-thumb.offsetWidth/2);begin(e.clientX,e.pointerId);track.setPointerCapture?.(e.pointerId);e.preventDefault()});
-  window.addEventListener('pointermove',e=>{if(dragging)setDrag(startDrag+(e.clientX-startX))});
-  window.addEventListener('pointerup',finish);window.addEventListener('pointercancel',finish);
-
-  // Legacy mouse/touch fallback for browsers or cached environments with partial PointerEvent support.
-  thumb.addEventListener('mousedown',e=>{if(window.PointerEvent)return;begin(e.clientX,null);e.preventDefault()});
-  window.addEventListener('mousemove',e=>{if(dragging&&!window.PointerEvent)setDrag(startDrag+(e.clientX-startX))});
-  window.addEventListener('mouseup',()=>{if(!window.PointerEvent)finish()});
-  thumb.addEventListener('touchstart',e=>{if(window.PointerEvent)return;const t=e.touches[0];begin(t.clientX,null);e.preventDefault()},{passive:false});
-  window.addEventListener('touchmove',e=>{if(dragging&&!window.PointerEvent){setDrag(startDrag+(e.touches[0].clientX-startX));e.preventDefault()}},{passive:false});
-  window.addEventListener('touchend',()=>{if(!window.PointerEvent)finish()});
-
-  track.addEventListener('dblclick',openRules);
-  track.addEventListener('keydown',e=>{recalc();if(e.key==='ArrowRight'){setDrag(current+Math.max(28,max*.12));e.preventDefault()}if(e.key==='ArrowLeft'){setDrag(current-Math.max(28,max*.12));e.preventDefault()}if(e.key==='Enter'||e.key===' '){openRules();e.preventDefault()}});
-  window.addEventListener('resize',()=>setDrag(Math.min(current,max)));
-  track.style.setProperty('--drag','0px');requestAnimationFrame(()=>setDrag(0));
-})();
-
-// v10: rules are physically absent until the slider is completed.
-// Once unlocked, the rules header and each rule group reveal progressively as they approach the viewport.
-(function initTurboRevealV10(){
-  const rules=document.getElementById('rules');
-  const launcher=document.getElementById('rulesDragLauncher');
-  let unlocked=true;
-  let io=null;
-
-  const selector='.reveal-section,.section-head,.about-grid>.card,.creator,.rule-group,.form-shell,.rules-gateway';
-
-  function canObserve(el){
-    if(!el) return false;
-    // Nothing inside the rules section should participate while it is still locked/display:none.
-    if(el.closest('#rules') && !unlocked) return false;
-    return true;
-  }
-
-  function revealTargets(root=document){
-    const targets=[...root.querySelectorAll(selector)].filter(canObserve);
-    if(io){
-      targets.forEach(el=>{
-        if(!el.classList.contains('is-visible')) io.observe(el);
-      });
-    }else{
-      targets.forEach(el=>el.classList.add('is-visible'));
-    }
-  }
-
-  if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){
-    io=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    },{
-      // Begin revealing a little before the element fully reaches the viewport.
-      rootMargin:'0px 0px -9% 0px',
-      threshold:.07
-    });
-  }
-
-  function unlockRules(){
-    if(unlocked) return;
-    unlocked=true;
-    if(!rules) return;
-
-    // Remove display:none first, but do NOT reveal all children at once.
-    rules.classList.remove('rules-locked');
-    rules.classList.add('rules-unlocked');
-    rules.setAttribute('aria-hidden','false');
-
-    // Register the already-rendered rules immediately. This is the part that was missing in V9.
-    requestAnimationFrame(()=>{
-      revealTargets(rules);
-      // If the API injects rule groups a moment later, the observer below catches them too.
-    });
-  }
-  window.__turboUnlockRules=unlockRules;
-
-  // Navigation "القوانين" points to the slider until it has been unlocked.
-  document.querySelectorAll('a[href="#rules"]').forEach(a=>a.addEventListener('click',e=>{
-    if(unlocked || !launcher) return;
-    e.preventDefault();
-    launcher?.scrollIntoView({behavior:'smooth',block:'center'});
-    launcher?.classList.add('is-near');
-    setTimeout(()=>launcher?.classList.remove('is-near'),1800);
-  }));
-
-  // Normal site reveal, excluding the hidden rules section.
-  revealTargets(document);
-
-  if(launcher && 'IntersectionObserver' in window){
-    const near=new IntersectionObserver(entries=>{
-      entries.forEach(e=>launcher.classList.toggle('is-near',e.isIntersecting));
-    },{rootMargin:'-20% 0px -20% 0px',threshold:.15});
-    near.observe(launcher);
-  }
-
-  // Dynamic creators/rules/forms inserted by API calls.
-  const mo=new MutationObserver(records=>{
-    for(const rec of records){
-      rec.addedNodes.forEach(node=>{
-        if(node.nodeType!==1) return;
-        if(canObserve(node) && node.matches?.(selector) && !node.classList.contains('is-visible')){
-          if(io) io.observe(node); else node.classList.add('is-visible');
-        }
-        revealTargets(node);
-      });
-    }
-  });
-  mo.observe(document.body,{childList:true,subtree:true});
-})();
-
-// ===== V16: application route + interactive cursor =====
-(()=>{
-  const aura=document.getElementById('cursorAura'),dot=document.getElementById('cursorDot');
-  if(aura&&dot&&matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    let tx=innerWidth/2,ty=innerHeight/2,x=tx,y=ty,last=0;
-    window.addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;dot.style.transform=`translate3d(${tx}px,${ty}px,0)`;const now=performance.now();if(now-last>55){last=now;const p=document.createElement('i');p.className='cursor-spark';p.style.left=tx+'px';p.style.top=ty+'px';document.body.appendChild(p);setTimeout(()=>p.remove(),650)}});
-    const tick=()=>{x+=(tx-x)*.13;y+=(ty-y)*.13;aura.style.transform=`translate3d(${x}px,${y}px,0)`;requestAnimationFrame(tick)};tick();
-    document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,input,textarea,select,.character-card'))document.body.classList.add('cursor-hot')});
-    document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,input,textarea,select,.character-card'))document.body.classList.remove('cursor-hot')});
-  }
-  window.addEventListener('hashchange',()=>{auditEvent('navigate',{hash:location.hash||'#home'});});
-  document.addEventListener('click',e=>{const el=e.target.closest('button,a,[role="button"]');if(!el)return;const label=(el.getAttribute('aria-label')||el.textContent||el.id||el.className||'interaction').trim().replace(/\s+/g,' ').slice(0,120);auditEvent('click',{label,tag:el.tagName,id:el.id||null})},true);
-})();
-
-// ===== V11: animated LEGEND loader on actionable clicks =====
-(()=>{
-  const loader=document.getElementById('turboActionLoader');
-  if(!loader) return;
-  let timer=null;
-  const showTurboLoader=(minMs=560)=>{
-    clearTimeout(timer);
-    loader.classList.add('is-active');
-    loader.setAttribute('aria-hidden','false');
-    document.documentElement.style.setProperty('--turbo-loader-active','1');
-    timer=setTimeout(hideTurboLoader,minMs);
-  };
-  const hideTurboLoader=()=>{
-    loader.classList.remove('is-active');
-    loader.setAttribute('aria-hidden','true');
-    document.documentElement.style.removeProperty('--turbo-loader-active');
-  };
-  window.showTurboLoader=showTurboLoader;
-  window.hideTurboLoader=hideTurboLoader;
-
-  // Links get a short cinematic transition before navigation.
-  document.addEventListener('click',e=>{
-    const el=e.target.closest('a[href],button,[role="button"]');
-    if(!el || loader.contains(el) || el.disabled) return;
-    if(el.matches('.rules-drag-thumb') || el.closest('.rules-drag-track')) return; // drag control, not a normal click
-    if(el.matches('button[type="submit"]')){ showTurboLoader(720); return; }
-
-    if(el.tagName==='A'){
-      const href=el.getAttribute('href')||'';
-      if(!href || href==='javascript:void(0)') return;
-      // Same-page section links: animate briefly, then scroll/change hash.
-      if(href==='#apply') return;
-      if(href.startsWith('#')){
-        e.preventDefault();
-        showTurboLoader(430);
-        setTimeout(()=>{
-          hideTurboLoader();
-          location.hash=href.slice(1);
-          document.querySelector(href)?.scrollIntoView({behavior:'smooth',block:'start'});
-        },390);
-        return;
-      }
-      // External / normal navigation. Respect target=_blank.
-      e.preventDefault();
-      const newTab=el.target==='_blank';
-      showTurboLoader(650);
-      setTimeout(()=>{
-        if(newTab) window.open(el.href,'_blank','noopener');
-        else location.href=el.href;
-      },560);
-      return;
-    }
-    // Regular non-submit UI buttons: visual feedback without blocking their handler.
-    showTurboLoader(480);
-  },true);
-
-  // Never leave the overlay hanging after tab restore/back-forward cache.
-  window.addEventListener('pageshow',()=>setTimeout(hideTurboLoader,80));
-})();
+// Navigation is immediate; legacy drag, cursor and delayed link interceptors removed.
+window.addEventListener('hashchange',()=>auditEvent('navigate',{hash:location.hash||'#home'}));
 const JOB_META={
   police:{name:'تقديم الشرطة',code:'LSPD 01',eyebrow:'LOS SANTOS POLICE DEPARTMENT',desc:'لما تنتهي كل الخيارات، أنت الأمن الأخير.',icon:'◈'},
   ems:{name:'تقديم المستشفى',code:'EMS 02',eyebrow:'EMERGENCY MEDICAL SERVICES',desc:'حياة تحتاج من ينقذها.',icon:'✚'},

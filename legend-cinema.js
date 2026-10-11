@@ -6,7 +6,7 @@
  async function startFilm(){try{film.muted=true;await film.play();playButton.hidden=true;status.textContent='فيديو المدينة';filmToggle.textContent='إيقاف الفيديو Ⅱ';filmToggle.setAttribute('aria-pressed','false');}catch{playButton.hidden=false;status.textContent='اضغط تشغيل الفيديو';}}
  playButton.addEventListener('click',()=>{manuallyPaused=false;startFilm()});
  filmToggle.addEventListener('click',()=>{if(film.paused){manuallyPaused=false;startFilm()}else{manuallyPaused=true;film.pause();filmToggle.textContent='تشغيل الفيديو ▶';filmToggle.setAttribute('aria-pressed','true')}});
- film.addEventListener('error',()=>{status.textContent='تعذر تحميل الفيديو. تأكد من رفع legend-city.mp4 بجانب index.html';playButton.hidden=false});
+ film.addEventListener('error',()=>{status.textContent='تعذر تحميل الفيديو. تأكد من رفع legend-city-lite.mp4 بجانب index.html';playButton.hidden=false});
  film.addEventListener('playing',()=>{playButton.hidden=true;status.textContent='فيديو المدينة'});
  if(reduced){film.pause();filmToggle.textContent='تشغيل الفيديو ▶';manuallyPaused=true;}else startFilm();
  let sound=false,ctx,lastHover=0;
