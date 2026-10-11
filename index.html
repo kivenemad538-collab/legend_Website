@@ -21,11 +21,12 @@
   <meta name="twitter:title" content="Legend RP — Roleplay">
   <meta name="twitter:description" content="Legend RP — سيرفر رول بلاي عربي.">
   <meta name="twitter:image" content="https://kivenemad538-collab.github.io/legend_Website/legend-preview.png">
-  <link rel="stylesheet" href="style.css?v=16-network">
+  <link rel="stylesheet" href="style.css?v=19-layout">
 
 
 
-<link rel="preload" as="image" href="legend-logo.webp?v=15">
+<link rel="preload" as="image" href="legend-mark.png?v=19">
+<link rel="stylesheet" href="legend-layout.css?v=19">
 </head>
 
 <body class="legend-v8">
@@ -44,13 +45,13 @@
 
   <header class="topbar">
     <a class="brand" href="#home">
-      <span class="brand-logo"><img src="legend-logo.webp?v=15" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo></span>
-      <span class="brand-name"><b>LEGEND</b><small>ROLEPLAY</small></span>
+      <span class="brand-logo"><img src="legend-mark.png?v=19" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo></span>
+      
     </a>
     <nav id="nav"><a href="#home">المدينة</a><a href="#jobs">الوظائف</a><a id="applicationNavLink" href="#apply">التقديم</a><a href="#rules">القوانين</a><a href="#news">الأخبار</a><a href="#team">الفريق</a><a href="#creators">اللايفات</a>
     </nav>
     <div class="top-actions">
-      <button id="languageToggle" type="button" aria-label="Switch language">EN</button>
+      <button id="languageToggle" type="button" aria-label="تغيير اللغة">اللغة: العربية</button>
       <button id="menu" class="menu-btn" type="button">☰</button>
       <a id="loginBtn" class="discord-btn" href="https://web-production-a209e.up.railway.app/auth/discord">
         <span class="discord-icon">D</span><span>تسجيل دخول Discord</span>
@@ -71,14 +72,14 @@
 </section>
 
 <section id="cityJourney" class="city-journey" aria-label="رحلتك في Legend">
- <div class="journey-pin"><div class="journey-heading"><small>YOUR NEXT CHAPTER</small><h2>مش مجرد دخول.<br><span>دي بداية حكاية.</span></h2><p>اسحب واكتشف خطوات رحلتك.</p><div class="journey-track" aria-hidden="true"><i></i></div><a class="btn primary" href="#apply">ابدأ التقديم ↖</a></div>
- <div class="journey-stage"><div class="journey-orbit" aria-hidden="true"><span>L</span><i></i></div><div class="journey-panels">
+ <div class="journey-pin"><div class="journey-heading"><small>YOUR NEXT CHAPTER</small><h2>مش مجرد دخول.<br><span>دي بداية حكاية.</span></h2><p>ثلاث خطوات وتبدأ حكايتك.</p><div class="journey-track" aria-hidden="true"><i></i></div><a class="btn primary" href="#apply">ابدأ التقديم ↖</a></div>
+ <div class="journey-stage"><div class="journey-panels">
  <article class="journey-panel active"><span>01 / YOUR CHARACTER</span><h3>شخصيتك.<br>اختياراتك.</h3><p>اختار بداية شخصيتك واكتب قصتها. كل إجابة بتعرّفنا عليك أكتر.</p><b>خليك أنت صاحب القصة.</b></article>
  <article class="journey-panel"><span>02 / THE APPLICATION</span><h3>خطوة واضحة.<br>وبداية جديدة.</h3><p>قدّم من حساب Discord وتابع حالة طلبك وقرار الإدارة من نفس المكان.</p><b>التقديم، المراجعة، المقابلة.</b></article>
  <article class="journey-panel"><span>03 / THE CITY</span><h3>المدينة ليك.<br>اختار طريقك.</h3><p>اكتشف الأقسام والوظائف، واقرأ دليل المدينة قبل ما تبدأ رحلتك.</p><b>كل طريق بيحكي حكاية.</b></article>
  </div><div class="journey-dots" aria-hidden="true"><i class="active"></i><i></i><i></i></div></div></div>
 </section>
-<section id="cityPaths" class="city-paths"><div class="paths-pin"><div class="paths-heading"><small>CHOOSE YOUR PATH</small><h2>طريقك مش واحد.</h2><span>كمّل سكرول واكتشف ↙</span></div><div class="paths-window"><div class="paths-track">
+<section id="cityPaths" class="city-paths"><div class="paths-pin"><div class="paths-heading"><small>CHOOSE YOUR PATH</small><h2>طريقك مش واحد.</h2><span>اختار المكان اللي يناسب شخصيتك</span></div><div class="paths-window"><div class="paths-track">
  <a href="#jobs" class="path-card"><span>01 / DEPARTMENTS</span><b>النظام.<br>والمسؤولية.</b><p>اكتشف تقديمات الشرطة والإسعاف والجهات المتاحة.</p><i>الوظائف ↖</i></a>
  <a href="#rules" class="path-card"><span>02 / ROLEPLAY</span><b>سيناريو.<br>وله معنى.</b><p>اعرف حدود الشخصية وقواعد التعامل، وادخل مستعد.</p><i>دليل المدينة ↖</i></a>
  <a href="#team" class="path-card"><span>03 / COMMUNITY</span><b>ناس.<br>ورا المدينة.</b><p>تعرّف على فريق Legend وأقسام الإدارة.</p><i>الفريق ↖</i></a>
@@ -146,7 +147,7 @@
 <div id="creatorPortal" class="application-portal" hidden><div class="portal-shell"><div class="portal-topbar"><b>LEGEND / CREATOR PARTNERS</b><button id="closeCreatorPortal" type="button" aria-label="Close">✕</button></div><div class="creator-portal-body"></div></div></div>
   <div id="jobPortal" class="application-portal hidden" aria-hidden="true">
     <div class="portal-noise"></div><div class="portal-shell job-portal-shell">
-      <div class="portal-topbar"><div class="portal-brand"><img src="legend-logo.webp?v=15" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo><div><b>LEGEND JOBS</b><small>DEPARTMENT APPLICATION</small></div></div><button id="closeJobPortal" class="portal-close" type="button" data-close-portal="job" onclick="closeJobPortal()" aria-label="إغلاق تقديم الوظيفة">✕</button></div>
+      <div class="portal-topbar"><div class="portal-brand"><img src="legend-mark.png?v=19" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo><div><b>LEGEND JOBS</b><small>DEPARTMENT APPLICATION</small></div></div><button id="closeJobPortal" class="portal-close" type="button" data-close-portal="job" onclick="closeJobPortal()" aria-label="إغلاق تقديم الوظيفة">✕</button></div>
       <div id="jobPortalBody" class="portal-body"></div>
     </div>
   </div>
@@ -155,7 +156,7 @@
     <div class="portal-noise"></div>
     <div class="portal-shell">
       <div class="portal-topbar">
-        <div class="portal-brand"><img src="legend-logo.webp?v=15" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo><div><b>LEGEND APPLICATION</b><small>CHARACTER ENTRY SYSTEM</small></div></div>
+        <div class="portal-brand"><img src="legend-mark.png?v=19" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo><div><b>LEGEND APPLICATION</b><small>CHARACTER ENTRY SYSTEM</small></div></div>
         <button id="closeApplicationPortal" class="portal-close" type="button" data-close-portal="application" onclick="closeApplicationPortal()" aria-label="إغلاق التقديم">✕</button>
       </div>
       <div id="applicationPortalBody" class="portal-body"></div>
@@ -163,13 +164,13 @@
   </div>
   
 
-  <footer><div class="brand footer-brand"><span class="brand-logo small"><img src="legend-logo.webp?v=15" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo></span><span class="brand-name"><b>LEGEND</b><small>ROLEPLAY</small></span></div><span><a href="#about">عن Legend</a> · <a href="#team">الفريق</a> · <a href="#news">الأخبار</a><br>© 2026 Legend Roleplay</span></footer>
+  <footer><div class="brand footer-brand"><span class="brand-logo small"><img src="legend-mark.png?v=19" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo></span></div><span><a href="#about">عن Legend</a> · <a href="#team">الفريق</a> · <a href="#news">الأخبار</a><br>© 2026 Legend Roleplay</span></footer>
   <div id="setupBanner" class="setup-banner hidden"></div><div id="toast"></div>
   <div id="turboActionLoader" class="turbo-action-loader" aria-hidden="true">
     <div class="turbo-loader-scan"></div>
     <div class="turbo-loader-corners"><span></span><span></span><span></span><span></span></div>
     <div class="turbo-loader-center">
-      <div class="turbo-loader-mark"><div class="turbo-loader-ring"></div><img class="turbo-loader-logo" src="legend-logo.webp?v=15" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo></div>
+      <div class="turbo-loader-mark"><div class="turbo-loader-ring"></div><img class="turbo-loader-logo" src="legend-mark.png?v=19" alt="Legend" width="40" height="40" decoding="async" data-turbo-logo></div>
       <div class="turbo-loader-title">LEGEND <b>RP</b></div>
       <div class="turbo-loader-sub">LOADING • ROLEPLAY EXPERIENCE</div>
       <div class="turbo-loader-line"></div>
@@ -191,12 +192,12 @@
  document.addEventListener('pointerover',e=>{if(fx&&e.pointerType==='mouse'&&e.target.closest('a,button')&&performance.now()-lastHover>180){lastHover=performance.now();clickSound();}});
 })();
 </script>
-  <script src="config.js?v=legend-2"></script><script src="app.js?v=16-network"></script>
-<script src="store.js?v=10"></script>
+  <script src="config.js?v=legend-2"></script><script src="app.js?v=18-full-language"></script>
+<script src="store.js?v=18-full-language"></script>
 
 <script src="legend-cinema.js?v=15-speed"></script>
-<script src="legend-i18n.js?v=17-fix"></script>
-<script src="creator-ui.js?v=16"></script>
+<script src="legend-i18n.js?v=18-full-language"></script>
+<script src="creator-ui.js?v=18-full-language"></script>
 <script src="legend-experience.js?v=16-network"></script>
 </body>
 </html>

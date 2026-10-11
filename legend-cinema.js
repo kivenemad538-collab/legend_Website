@@ -22,8 +22,7 @@
  function progress(el){const r=el.getBoundingClientRect();return clamp(-r.top/Math.max(1,r.height-innerHeight));}
  function update(){scheduled=false;header?.classList.toggle('legend-scrolled',scrollY>50);const max=document.documentElement.scrollHeight-innerHeight;if(meter)meter.style.width=(max>0?scrollY/max*100:0)+'%';if(document.body.dataset.page!=='home'||reduced)return;
  const hr=hero.getBoundingClientRect();if(hr.bottom>0&&hr.top<innerHeight){hero.style.setProperty('--hero-shift',Math.min(80,Math.max(0,-hr.top)*.16)+'px');hero.style.setProperty('--hero-fade',String(Math.max(.2,1-Math.max(0,-hr.top)/innerHeight)));}
- if(journey){const p=progress(journey),step=Math.min(2,Math.floor(p*3));journey.style.setProperty('--journey-progress',p);if(step!==last){last=step;panels.forEach((el,i)=>{el.classList.toggle('active',i===step);el.setAttribute('aria-hidden',String(i!==step));});dots.forEach((el,i)=>el.classList.toggle('active',i===step));}}
- if(paths&&track&&innerWidth>700){const p=progress(paths),overflow=Math.max(0,track.scrollWidth-track.parentElement.clientWidth);track.style.transform='translate3d('+(-p*overflow)+'px,0,0)';}
+ panels.forEach(el=>el.removeAttribute('aria-hidden'));
  }
  function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(update);}}
  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule,{passive:true});addEventListener('hashchange',schedule);update();
