@@ -1,5 +1,1 @@
-موقع Legend V9
-ارفع كل الملفات مباشرة إلى جذر مستودع الموقع واستبدل القديمة، ثم اضغط Ctrl+Shift+R.
-نسخة البوت في ملف LEGEND-BOT-V9.zip منفصل وترفع على Railway.
-تم حذف الانتقالات التي تؤخر الضغطات، وتحميل بيانات الموقع والحساب بالتوازي، وتحميل المتجر عند فتحه فقط، وإضافة إعادة اتصال وعدم تسجيل الخروج عند فشل الشبكة المؤقت.
-تم التحقق من كود JavaScript والتنقل ونماذج الرسائل ومسارات الأصول. لم يتم اختبار المتصفح الحي أو إرسال Discord.
+Upload all website files to the root of legend_Website. Do not upload bot files. Application review and form steps now reset their own scroll position.

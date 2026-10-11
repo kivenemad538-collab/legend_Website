@@ -10,6 +10,10 @@
  scrollTo({top:0,behavior:'instant'});
  }
  addEventListener('hashchange',route);route();
+ let refreshing=false;
+ async function refreshAccount(){if(refreshing||!token||!pub||document.hidden||document.body.dataset.page!=='apply')return;refreshing=true;try{const data=await api('/api/me');me=data;renderApply();}catch{}finally{refreshing=false;}}
+ addEventListener('focus',refreshAccount);addEventListener('hashchange',refreshAccount);setInterval(refreshAccount,15000);
+
  // Store section arrives from the existing store module; keep its original API handlers.
  let adminTab='requests';
  function setupAdmin(){const dashboard=document.querySelector('#adminBox .admin-dashboard');if(!dashboard||dashboard.querySelector('.admin-tabs'))return;
@@ -29,7 +33,7 @@
  const controls=document.createElement('div');controls.className='wizard-controls';controls.innerHTML='<button type="button" data-back>رجوع</button><button type="button" class="primary" data-next>الخطوة الجاية ←</button>';form.querySelector('.vision-submit').before(controls);
  const submit=form.querySelector('.vision-submit');form.noValidate=true;
  function validate(){const inputs=sections[step]?.querySelectorAll('input,textarea,select')||[];for(const el of inputs)if(!el.checkValidity()){el.reportValidity();return false}return true}
- function show(n){step=n;sections.forEach((s,i)=>s.hidden=i!==n);review.hidden=n!==3;submit.hidden=n!==3;controls.querySelector('[data-next]').hidden=n===3;controls.querySelector('[data-back]').disabled=n===0;progress.querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('active',i===n);b.setAttribute('aria-current',i===n?'step':'false')});if(n===3){const rows=[];for(const input of form.querySelectorAll('input[name],textarea[name]')){const label=input.closest('.field')?.querySelector('label')?.textContent||input.closest('.vision-question')?.querySelector('strong')?.textContent||(input.name==='story'?'قصة الشخصية':input.name);rows.push(label+'\n'+input.value)}review.textContent='راجع تقديمك قبل الإرسال\n\n'+rows.join('\n\n');}progress.scrollIntoView({block:'start',behavior:'smooth'});}
+ function show(n){step=n;sections.forEach((s,i)=>s.hidden=i!==n);review.hidden=n!==3;submit.hidden=n!==3;controls.querySelector('[data-next]').hidden=n===3;controls.querySelector('[data-back]').disabled=n===0;progress.querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('active',i===n);b.setAttribute('aria-current',i===n?'step':'false')});if(n===3){const rows=[];for(const input of form.querySelectorAll('input[name],textarea[name]')){const label=input.closest('.field')?.querySelector('label')?.textContent||input.closest('.vision-question')?.querySelector('strong')?.textContent||(input.name==='story'?'قصة الشخصية':input.name);rows.push(label+'\n'+input.value)}review.textContent='راجع تقديمك قبل الإرسال\n\n'+rows.join('\n\n');}const portal=form.closest('.application-portal');if(portal){portal.scrollTo({top:0,behavior:'instant'});requestAnimationFrame(()=>portal.scrollTo({top:0,behavior:'instant'}));}else{progress.scrollIntoView({block:'start',behavior:'instant'});}}
  controls.querySelector('[data-back]').onclick=()=>show(Math.max(0,step-1));controls.querySelector('[data-next]').onclick=()=>{if(validate())show(Math.min(3,step+1))};
  form.onsubmit=e=>{e.preventDefault();for(let i=0;i<sections.length;i++){for(const el of sections[i].querySelectorAll('input,textarea,select'))if(!el.checkValidity()){show(i);el.reportValidity();return}}const button=submit.querySelector('[type=submit]');button.disabled=true;Promise.resolve(original(e)).finally(()=>button.disabled=false);};show(0);
  }

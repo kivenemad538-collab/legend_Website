@@ -197,8 +197,10 @@ function renderPublic(){
   $('#aboutText').textContent=pub.settings.aboutText;
   renderRules(pub.settings.rules || []);
 
-  const logoSrc=String(pub.settings.logoImage||'turbo-logo.png?v=24').trim()||'turbo-logo.png?v=24';
-  document.querySelectorAll('[data-turbo-logo]').forEach(img=>{if(img.src!==logoSrc)img.src=logoSrc});
+  const logoSrc=String(pub.settings.logoImage||'legend-logo-fast.png?v=10').trim()||'legend-logo-fast.png?v=10';
+  // Keep the local logo visible while an optional custom URL loads in the background.
+  const logoUrl=new URL(logoSrc,location.href).href;
+  document.querySelectorAll('[data-turbo-logo]').forEach(img=>{if(img.src===logoUrl)return;const preload=new Image();preload.onload=()=>{img.src=logoUrl;};preload.src=logoUrl;});
 
   const city=String(pub.settings.cityBackground||'').trim();
   const cityPhoto=$('#cityPhoto');
@@ -263,6 +265,7 @@ function renderApply(){
     return;
   }
   // صفحة واحدة فقط: لو فيه تقديم محفوظ نعرض حالته هنا بدل وجود صفحة حالة منفصلة.
+  if(me?.latest?.status==='reset'){me.latest=null;me.canApply=!!pub.settings.applicationsOpen;}
   if(me?.latest){
     $('#apply')?.classList.add('showing-application-status');
     const allowNew=!!me.canApply && !!pub?.settings?.applicationsOpen && me.latest.status!=='banned' && me.latest.status!=='voice_passed';
@@ -283,7 +286,7 @@ function openApplicationPortal(){
   if(!token){oauthLogin();return}
   auditEvent('application_portal_open',{canApply:!!me?.canApply,status:me?.latest?.status||null});
   const portal=$('#applicationPortal');
-  portal.classList.remove('hidden');portal.setAttribute('aria-hidden','false');document.body.classList.add('portal-open');
+  portal.classList.remove('hidden');portal.setAttribute('aria-hidden','false');document.body.classList.add('portal-open');portal.scrollTo({top:0,behavior:'instant'});
   if(!pub.settings.applicationsOpen){$('#applicationPortalBody').innerHTML='<div class="portal-message"><b>التقديم مغلق حاليًا</b><p>ارجع في وقت لاحق بعد فتح التقديم من الإدارة.</p></div>';return}
   if(me&&!me.canApply){$('#applicationPortalBody').innerHTML=`<div class="portal-message"><b>مش متاح تقديم جديد حاليًا</b><p>حالة تقديمك موجودة في صفحة التقديم نفسها.</p><button class="smallbtn" onclick="closeApplicationPortal();location.hash='apply';renderApply()">الرجوع للتقديم</button></div>`;return}
   selectedCharacterType='';
@@ -305,8 +308,17 @@ window.chooseCharacter=function(id){
     <div class="vision-form-section"><div class="vision-section-title"><span>03</span><div><b>أسئلة الرول بلاي</b><small>Roleplay questions</small></div></div>${pub.questions.map((q,i)=>`<div class="vision-question"><div class="vision-q-number">${String(i+1).padStart(2,'0')}</div><div class="vision-q-body"><strong>${esc(q)}</strong><textarea name="q${i}" required minlength="10" placeholder="اكتب إجابتك هنا..."></textarea></div></div>`).join('')}</div>
     <div class="vision-submit"><div><b>راجع إجاباتك قبل الإرسال</b><small>بعد الإرسال هتقدر تتابع حالة الطلب من الموقع.</small></div><button class="btn primary" type="submit">إرسال التقديم</button></div></form>`;
   $('#applyForm').onsubmit=submitApply;
+  $('#applicationPortal').scrollTo({top:0,behavior:'instant'});
 };
-async function submitApply(e){e.preventDefault();const f=new FormData(e.target);const body={realName:f.get('realName'),age:Number(f.get('age')),story:f.get('story'),characterType:selectedCharacterType,answers:pub.questions.map((_,i)=>f.get('q'+i))};try{const j=await api('/api/applications',{method:'POST',body:JSON.stringify(body)});toast(`تم إرسال التقديم رقم #${j.application.number}`);auditEvent('application_submitted',{applicationNumber:j.application.number});me=await api('/api/me');renderMe();closeApplicationPortal();location.hash='apply'}catch(e){toast(errorArabic(e.message))}}
+async function submitApply(e){
+ e.preventDefault();const f=new FormData(e.target);const body={realName:f.get('realName'),age:Number(f.get('age')),story:f.get('story'),characterType:selectedCharacterType,answers:pub.questions.map((_,i)=>f.get('q'+i))};
+ try{const j=await api('/api/applications',{method:'POST',body:JSON.stringify(body)});
+ me={...me,latest:j.application,canApply:false,waitMs:0};renderApply();closeApplicationPortal();location.hash='apply';
+ toast(`تم حفظ التقديم رقم #${j.application.number}`);auditEvent('application_submitted',{applicationNumber:j.application.number});
+ api('/api/me').then(data=>{me=data;renderMe();}).catch(()=>{});
+ }catch(err){toast(errorArabic(err.message));}
+}
+
 function errorArabic(e){return({REAL_NAME_TWO_PARTS:'اكتب الاسم الحقيقي ثنائي.',INVALID_AGE:'العمر غير صحيح.',STORY_TOO_SHORT:'قصة الشخصية قصيرة جدًا.',ANSWERS_INCOMPLETE:'كمّل كل أسئلة الرول بلاي.',INVALID_CHARACTER_TYPE:'اختار نوع الشخصية الأول.',COOLDOWN:'لسه مدة الـ12 ساعة مخلصتش.',BLOCKED:'عندك تقديم قائم بالفعل.',CLOSED:'التقديم مغلق.',BANNED:'الحساب ده محظور نهائيًا من التقديم.',API_NOT_CONFIGURED:'رابط Railway مش متظبط.'})[e]||'حصل خطأ. جرّب تاني.'}
 function countdown(){const end=Date.now()+me.waitMs;const tick=()=>{const el=$('#countdown');if(!el)return;const d=Math.max(0,end-Date.now()),h=Math.floor(d/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);el.textContent=`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;if(d<=0)setTimeout(()=>location.reload(),1000)};tick();setInterval(tick,1000)}
 function statusVisual(status){
@@ -385,6 +397,7 @@ window.openApplication=id=>{
   const decisionInfo=(['rejected','voice_rejected','banned'].includes(a.status)||a.reviewedAt||a.voicePassedAt||a.voiceReviewedAt)?`<div class="review-decision"><div><label>النتيجة الحالية</label><b>${statusText(a.status)}</b></div>${a.reason?`<div><label>السبب</label><p>${esc(a.reason)}</p></div>`:''}${a.reviewedBy?`<div><label>تمت المراجعة بواسطة</label><p>${esc(a.reviewedBy)}</p></div>`:''}${a.reviewedAt?`<div><label>وقت مراجعة المرحلة الأولى</label><p>${new Date(a.reviewedAt).toLocaleString('ar-EG')}</p></div>`:''}${a.voiceReviewedAt?`<div><label>وقت مراجعة الصوتي</label><p>${new Date(a.voiceReviewedAt).toLocaleString('ar-EG')}</p></div>`:''}${a.voicePassedAt?`<div><label>وقت القبول النهائي</label><p>${new Date(a.voicePassedAt).toLocaleString('ar-EG')}</p></div>`:''}</div>`:'';
   $('#applicationReview').innerHTML=`<div class="review-shell"><div class="review-head"><div><span>APPLICATION #${a.number}</span><h3>${esc(a.realName)}</h3><p>${esc(a.discordTag||'')} • ${esc(a.discordId)} • العمر ${esc(a.age)}</p></div><button class="review-close" onclick="closeApplication()">✕</button></div><div class="review-meta"><span>${statusText(a.status)}</span><span>رقم التقديم #${a.number}</span><span>Discord ID: ${esc(a.discordId)}</span>${a.characterType?`<span>الشخصية: ${esc(CHARACTER_LABELS[a.characterType]||a.characterType)}</span>`:''}<span>${new Date(a.createdAt).toLocaleString('ar-EG')}</span>${slot?`<span>مقابلة: ${new Date(slot.at).toLocaleString('ar-EG')}</span>`:''}</div>${decisionInfo}<div class="review-block"><label>قصة الشخصية</label><p>${esc(a.story)}</p></div><div class="review-answers">${(a.answers||[]).map((x,i)=>`<div class="review-answer"><div class="review-q"><span>${String(i+1).padStart(2,'0')}</span><b>${esc(x.q)}</b></div><div class="review-a">${esc(x.a||'—')}</div></div>`).join('')}</div><div class="review-actions">${adminActionButtons(a)}</div></div>`;
   $('#applicationReview').classList.remove('hidden');
+  $('#applicationReview').scrollTo({top:0,behavior:'instant'});
 };
 window.closeApplication=()=>{$('#applicationReview')?.classList.add('hidden')};
 window.rejectApplication=async id=>{const reason=prompt('اكتب سبب الرفض. سيظهر للمتقدم:');if(reason===null)return;await applicationAction(id,'reject',reason)};
@@ -796,7 +809,7 @@ window.openJobPortal=function(type){
   const shopSelect=type==='mechanic'?`<div class="field full"><label>اختار الورشة</label><select name="workshopId" required><option value="">اختر الورشة</option>${shops.map(w=>`<option value="${esc(w.id)}">${esc(w.name)}</option>`).join('')}</select></div>`:'';
   $('#jobPortalBody').innerHTML=`<div class="portal-intro"><span>JOB APPLICATION</span><h2>${j.name}</h2><p>${j.desc}</p></div><form id="jobApplyForm" class="vision-form portal-form"><input type="hidden" name="type" value="${type}"><div class="form-grid"><div class="field"><label>الاسم الحقيقي</label><input name="realName" autocomplete="name" required></div><div class="field"><label>العمر</label><input name="age" type="number" min="16" max="80" required></div>${shopSelect}<div class="field full"><label>خبرتك في الوظيفة</label><textarea name="experience" minlength="20" maxlength="1000" required></textarea><small class="field-hint">20 حرف على الأقل</small></div><div class="field full"><label>ليه عايز تنضم للقسم؟</label><textarea name="why" minlength="20" maxlength="1000" required></textarea><small class="field-hint">20 حرف على الأقل</small></div><div class="field full"><label>أوقات تواجدك</label><textarea name="availability" minlength="5" maxlength="500" required></textarea></div></div><div id="jobFormError" class="notice bad hidden"></div><button id="jobSubmitBtn" class="btn primary wide" type="submit">إرسال التقديم</button></form>`;
   $('#jobApplyForm').onsubmit=submitJobApplication;
-  const p=$('#jobPortal');p.classList.remove('hidden');p.setAttribute('aria-hidden','false');document.body.classList.add('portal-open')
+  const p=$('#jobPortal');p.scrollTop=0;p.classList.remove('hidden');p.setAttribute('aria-hidden','false');document.body.classList.add('portal-open')
 };
 function closeJobPortal(){
   const p=$('#jobPortal');
