@@ -149,7 +149,7 @@ function statusText(s){return({pending:'قيد المراجعة',pre_accepted:'�
 async function init(){
   consumeToken();
   $('#menu').onclick=()=>$('#nav').classList.toggle('open');
-  document.querySelectorAll('#nav a').forEach(a=>a.onclick=(e)=>{ $('#nav').classList.remove('open'); if(a.getAttribute('href')==='#apply'){e.preventDefault();openApplicationPortal();} });
+  document.querySelectorAll('#nav a').forEach(a=>a.onclick=(e)=>{ $('#nav').classList.remove('open');  });
   if($('#closeApplicationPortal'))$('#closeApplicationPortal').onclick=closeApplicationPortal;
   if($('#closeJobPortal'))$('#closeJobPortal').onclick=closeJobPortal;
   $('#loginBtn').href=`${API || 'https://web-production-a209e.up.railway.app'}/auth/discord`; $('#loginBtn').onclick=oauthLogin;
@@ -782,7 +782,7 @@ init();
 (function initTurboRevealV10(){
   const rules=document.getElementById('rules');
   const launcher=document.getElementById('rulesDragLauncher');
-  let unlocked=false;
+  let unlocked=true;
   let io=null;
 
   const selector='.reveal-section,.section-head,.about-grid>.card,.creator,.rule-group,.form-shell,.rules-gateway';
@@ -840,7 +840,7 @@ init();
 
   // Navigation "القوانين" points to the slider until it has been unlocked.
   document.querySelectorAll('a[href="#rules"]').forEach(a=>a.addEventListener('click',e=>{
-    if(unlocked) return;
+    if(unlocked || !launcher) return;
     e.preventDefault();
     launcher?.scrollIntoView({behavior:'smooth',block:'center'});
     launcher?.classList.add('is-near');
@@ -882,7 +882,7 @@ init();
     document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,input,textarea,select,.character-card'))document.body.classList.add('cursor-hot')});
     document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,input,textarea,select,.character-card'))document.body.classList.remove('cursor-hot')});
   }
-  window.addEventListener('hashchange',()=>{auditEvent('navigate',{hash:location.hash||'#home'});if(location.hash==='#apply'&&!me?.latest)openApplicationPortal();});
+  window.addEventListener('hashchange',()=>{auditEvent('navigate',{hash:location.hash||'#home'});});
   document.addEventListener('click',e=>{const el=e.target.closest('button,a,[role="button"]');if(!el)return;const label=(el.getAttribute('aria-label')||el.textContent||el.id||el.className||'interaction').trim().replace(/\s+/g,' ').slice(0,120);auditEvent('click',{label,tag:el.tagName,id:el.id||null})},true);
 })();
 

@@ -288,7 +288,9 @@ async function dm(userId,payload){
   if(!client?.isReady()) return false;
   try{
     const u=await client.users.fetch(userId);
-    await u.send(typeof payload==='string'?{content:payload}:payload);
+    let message=typeof payload==='string'?{content:payload}:payload;
+    if(message?.content&&!message.embeds){message={...message,content:undefined,embeds:[new EmbedBuilder().setColor(0x3978ff).setAuthor({name:'LEGEND / إشعار جديد'}).setTitle('تحديث من مدينة Legend').setDescription(String(message.content).slice(0,3800)).setImage(frontendUrl+'/legend-preview.png').setFooter({text:'LEGEND • تابع التفاصيل من حسابك على الموقع'}).setTimestamp()]};}
+    await u.send(message);
     return true;
   }catch(e){
     console.warn('DM failed:',e.message);
@@ -296,15 +298,12 @@ async function dm(userId,payload){
   }
 }
 
-function turboDmEmbed({title,description,fields=[],colorValue=color,footer='Legend RP • Roleplay'}){
-  return new EmbedBuilder()
-    .setColor(colorValue)
-    .setAuthor({name:'Legend Application'})
-    .setTitle(title)
-    .setDescription(description||'')
-    .addFields(fields)
-    .setFooter({text:footer})
-    .setTimestamp();
+function turboDmEmbed({title,description,fields=[],colorValue=color,footer='LEGEND • PLAYER SERVICES'}){
+  const next=/قبولك نهائي|تصريح الدخول/.test(title)?'أهلًا بيك في المدينة. تابع دليل الدخول والقوانين من حسابك.':/رفض|لم تجتز/.test(title)?'راجع سبب القرار من الموقع. إعادة التقديم مرتبطة بالمدة الظاهرة في حسابك.':/حظر/.test(title)?'تفاصيل القرار موجودة في حسابك. تواصل مع الإدارة لو محتاج توضيح.':/مقابل/.test(title)?'راجع تفاصيل المقابلة وموعدها من حسابك، وخليك جاهز في الوقت المحدد.':'تابع حالة الطلب وأي تحديث جديد من حسابك على الموقع.';
+  return new EmbedBuilder().setColor(colorValue).setAuthor({name:'LEGEND / مركز خدمات اللاعبين'})
+    .setTitle(String(title).slice(0,256)).setDescription(String(description||'').slice(0,2800)+'\n\n**الخطوة الجاية**\n'+next)
+    .addFields(fields.slice(0,20)).setURL(frontendUrl+'/#apply')
+    .setImage(frontendUrl+'/legend-preview.png').setFooter({text:footer}).setTimestamp();
 }
 
 async function role(userId,roleId,add=true){
@@ -329,14 +328,14 @@ async function postApplication(app){
   if(!client?.isReady()||!IDS.REVIEW_CHANNEL_ID)return;
   const ch=await client.channels.fetch(IDS.REVIEW_CHANNEL_ID);
   if(!ch?.isTextBased()) throw new Error('REVIEW_CHANNEL_NOT_TEXT');
-  const e=new EmbedBuilder().setColor(color).setTitle(`تقديم #${app.number} — ${app.realName}`).setDescription(`<@${app.discordId}>`).addFields(
+  const e=new EmbedBuilder().setColor(0x3978ff).setAuthor({name:'LEGEND / مراجعة دخول المدينة'}).setTitle(`ملف تقديم #${app.number} — ${app.realName}`).setDescription(`**متقدم جديد للمدينة**\n<@${app.discordId}>\nراجع القصة والإجابات، وبعدها اختار القرار من الأزرار.`).addFields(
     {name:'العمر',value:String(app.age),inline:true},
     {name:'Discord',value:app.discordTag||app.discordId,inline:true},
     {name:'نوع الشخصية',value:({criminal:'شخصية إجرامية',police:'شرطي',mechanic:'ميكانيكي',ems:'مسعف',lawyer:'محامي',civilian:'مدني',business:'رجل أعمال'})[app.characterType]||'غير محدد',inline:true},
     {name:'قصة الشخصية',value:app.story.slice(0,1000)},
     ...app.answers.map((a,i)=>({name:`س${i+1}: ${a.q}`.slice(0,256),value:(a.a||'—').slice(0,900)})),
     {name:'مراجعة القصة',value:'مراجعة يدوية — لا يتم عرض نسبة AI غير موثوقة.'.slice(0,1024)}
-  ).setFooter({text:`Application ID: ${app.id}`}).setTimestamp();
+  ).setURL(frontendUrl+'/#admin').setFooter({text:`LEGEND • ملف التقديم ${app.number} • ${app.id}`}).setTimestamp();
 
   const row=new ActionRowBuilder().addComponents(
     new ButtonBuilder().setCustomId(`accept:${app.id}`).setLabel('قبول مبدئي').setStyle(ButtonStyle.Success),
@@ -421,7 +420,7 @@ async function postJobApplication(job){
     {name:'ليه عايز الوظيفة؟',value:String(job.why||'—').slice(0,1024)},
     {name:'أوقات التواجد',value:String(job.availability||'—').slice(0,1024)}
   ];
-  const embed=new EmbedBuilder().setColor(0x3b8fb8).setTitle(`تقديم ${JOB_LABELS[job.type]} #${job.number}`).addFields(fields).setFooter({text:`Job Application ID: ${job.id}`}).setTimestamp();
+  const embed=new EmbedBuilder().setColor(0x3978ff).setAuthor({name:'LEGEND / إدارة الوظائف'}).setTitle(`ملف ${JOB_LABELS[job.type]} • طلب #${job.number}`).setDescription('**طلب انضمام جديد**\nراجع بيانات وخبرة المتقدم قبل القبول وفتح تذكرة الاستكمال.').addFields(fields).setFooter({text:`Job Application ID: ${job.id}`}).setTimestamp();
   const row=new ActionRowBuilder().addComponents(
     new ButtonBuilder().setCustomId(`jobaccept:${job.id}`).setLabel('قبول وفتح تذكرة').setStyle(ButtonStyle.Success),
     new ButtonBuilder().setCustomId(`jobreject:${job.id}`).setLabel('رفض').setStyle(ButtonStyle.Danger)
