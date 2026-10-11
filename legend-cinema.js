@@ -9,6 +9,12 @@
  film.addEventListener('error',()=>{status.textContent='تعذر تحميل الفيديو. تأكد من رفع legend-city-lite.mp4 بجانب index.html';playButton.hidden=false});
  film.addEventListener('playing',()=>{playButton.hidden=true;status.textContent='فيديو المدينة'});
  if(reduced){film.pause();filmToggle.textContent='تشغيل الفيديو ▶';manuallyPaused=true;}else startFilm();
+ const music=document.getElementById('siteMusic'),musicToggle=document.getElementById('musicToggle');
+ music.volume=.35;
+ function musicLabel(){const playing=!music.paused;musicToggle.setAttribute('aria-pressed',String(playing));musicToggle.textContent=playing?'♫ إيقاف الأغنية':'♫ تشغيل أغنية اللودنج';}
+ musicToggle.addEventListener('click',async()=>{if(!music.paused){music.pause();return;}musicToggle.disabled=true;try{await music.play();}catch{musicToggle.textContent='تعذر التشغيل، اضغط للمحاولة';}finally{musicToggle.disabled=false;}});
+ music.addEventListener('playing',musicLabel);music.addEventListener('pause',musicLabel);
+ music.addEventListener('error',()=>{musicToggle.setAttribute('aria-pressed','false');musicToggle.textContent='تعذر تحميل الأغنية';});
  let sound=false,ctx,lastHover=0;
  const toggle=document.getElementById('cinemaSound');
  function tone(type){if(!sound)return;try{ctx??=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();const now=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(type==='click'?460:760,now);o.frequency.exponentialRampToValueAtTime(type==='click'?160:540,now+.09);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.035,now+.008);g.gain.exponentialRampToValueAtTime(.0001,now+.12);o.connect(g);g.connect(ctx.destination);o.start(now);o.stop(now+.13);}catch{}}
