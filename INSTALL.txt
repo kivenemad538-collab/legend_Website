@@ -2,3 +2,5 @@ LEGEND WEBSITE V10
 Upload all files in this archive to the root of legend_Website replacing the previous website files. Keep the existing bot V9 and its settings.
 This version adds legend-layout.css and the original loading-screen L as legend-mark.png.
 Changes: regular-flow sections, responsive header, consistent cards and spacing, existing application and creator endpoints retained.
+
+Community update: Install matching bot and server bridge. Website layout and Legend L logo from this version are preserved.

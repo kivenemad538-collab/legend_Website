@@ -121,7 +121,7 @@ const auditVisitorId=(()=>{let id=localStorage.getItem('turbo_visitor_id');if(!i
 function auditEvent(action,meta={}){if(!API_CONFIGURED)return;const headers={'content-type':'application/json'};if(token)headers.authorization=`Bearer ${token}`;fetch(API+'/api/audit/event',{method:'POST',headers,body:JSON.stringify({action,meta,path:location.pathname+location.hash,visitorId:auditVisitorId})}).catch(()=>{})}
 
 function showSetup(){const b=$('#setupBanner');b.classList.remove('hidden');b.innerHTML='⚠️ تسجيل Discord غير مربوط لسه. افتح <b>config.js</b> وحط رابط Railway الحقيقي مكان YOUR-RAILWAY-DOMAIN.'}
-function oauthLogin(e){if(e&&e.preventDefault)e.preventDefault();if(!API_CONFIGURED){showSetup();toast('رابط Railway غير مضبوط');return}window.location.assign(`${API}/auth/discord`)}
+function oauthLogin(e){if(e&&e.preventDefault)e.preventDefault();if(!API_CONFIGURED){showSetup();toast('رابط Railway غير مضبوط');return}window.location.assign(`${API}/auth/discord?lang=${window.legendLang||"ar"}`)}
 
 async function api(path,opt={}){
   if(!API_CONFIGURED) throw Object.assign(new Error('API_NOT_CONFIGURED'),{status:0});
