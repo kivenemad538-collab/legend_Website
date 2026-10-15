@@ -152,7 +152,7 @@ async function init(){
   document.querySelectorAll('#nav a').forEach(a=>a.onclick=(e)=>{ $('#nav').classList.remove('open');  });
   if($('#closeApplicationPortal'))$('#closeApplicationPortal').onclick=closeApplicationPortal;
   if($('#closeJobPortal'))$('#closeJobPortal').onclick=closeJobPortal;
-  $('#loginBtn').href=`${API || 'https://web-production-a209e.up.railway.app'}/auth/discord`; $('#loginBtn').onclick=oauthLogin;
+  $('#loginBtn').href=`${API || 'https://botsturbo-production.up.railway.app'}/auth/discord`; $('#loginBtn').onclick=oauthLogin;
   $('#adminSecretBtn').onclick=openAdminPanel;
   $('#adminSecretBtn').classList.add('hidden');
 
