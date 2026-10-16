@@ -1,0 +1,7 @@
+/* NEXUS red identity and responsive banner */
+:root{--blue:#ef3038;--panel:#1b1012;--muted:#c9afb1;--line:#ffffff17;color-scheme:dark}
+.cinema-hero{display:flex;flex-direction:column;align-items:stretch;min-height:0;background:#10090b;padding:130px max(24px,5vw) 110px;gap:40px;overflow:hidden}
+.nexus-banner{position:relative;width:100%;max-width:1800px;margin:0 auto;border:1px solid #ef303833;border-radius:16px;overflow:hidden;box-shadow:0 20px 80px #c4000022}
+.nexus-banner img{display:block;width:100%;height:auto;object-fit:contain}
+.cinema-shade{display:none}.cinema-label{display:none}.cinema-copy{width:min(900px,100%);margin:auto;text-align:center!important}.cinema-title{font-size:clamp(50px,7vw,90px)}.cinema-copy p{margin:22px auto}.hero-actions,.hero-badges{justify-content:center}.server-state,.live-server-status{margin-inline:auto}.cinema-bottom{position:static;justify-content:center;margin-top:15px}.scroll-cue{display:none}.brand{flex-basis:64px}.brand-logo{width:56px;height:56px}.brand-logo img{object-fit:contain}
+@media(max-width:700px){.cinema-hero{padding:110px 14px 60px;gap:28px}.nexus-banner{border-radius:8px}.cinema-copy{padding:0 10px}.cinema-copy em{font-size:23px}.brand-logo{width:44px;height:44px}}

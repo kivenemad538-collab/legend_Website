@@ -1,3 +1,4 @@
+if(localStorage.getItem('nexusBrandVersion')!=='1'){sessionStorage.removeItem('legend_public_cache');localStorage.setItem('nexusBrandVersion','1');}
 const RAW_API = String(window.TURBO_API || '').trim();
 const API_CONFIGURED = /^https:\/\//i.test(RAW_API) && !/YOUR-RAILWAY-DOMAIN/i.test(RAW_API);
 const API = API_CONFIGURED ? RAW_API.replace(/\/$/,'') : '';
@@ -61,7 +62,7 @@ const DEFAULT_RULE_GROUPS = [
     'الخلافات بين العصابات يجب أن تبدأ بسبب رول بلاي واضح، وليس لمجرد البحث عن إطلاق نار.',
     'يمنع تحويل كل تفاعل إلى قتال؛ التفاوض والتهديد والتصعيد التدريجي جزء أساسي من الرول بلاي.',
     'يمنع التحالف المؤقت غير المنطقي فقط للحصول على أفضلية عددية في قتال قائم.',
-    'احترم حدود السيناريو وأي قيود عددية أو تنظيمية تعلنها إدارة Legend للأحداث والعصابات.'
+    'احترم حدود السيناريو وأي قيود عددية أو تنظيمية تعلنها إدارة NEXUS للأحداث والعصابات.'
   ]],
   ['المناطق الآمنة والتفاعل',[
     'يمنع بدء أعمال عدائية في المناطق التي تحددها الإدارة كمناطق آمنة إلا إذا نصت قواعد حدث على غير ذلك.',
@@ -184,8 +185,8 @@ async function init(){
 
 function renderOffline(msg='الموقع جاهز، لكن رابط Railway لسه محتاج يتضاف في config.js.'){
   $('#applyState').textContent='الربط غير مكتمل';
-  $('#aboutText').textContent='Legend RP هو سيرفر رول بلاي عربي يهتم بالسيناريوهات وجودة التجربة وتفاعل اللاعبين.';
-  $('#creatorGrid').innerHTML='<div class="notice">صناع المحتوى هيظهروا هنا بعد اتصال الموقع بالبوت.</div>';if($('#teamGrid'))$('#teamGrid').innerHTML='<div class="notice">فريق Legend هيظهر هنا بعد اتصال الموقع.</div>';
+  $('#aboutText').textContent='NEXUS RP هو سيرفر رول بلاي عربي يهتم بالسيناريوهات وجودة التجربة وتفاعل اللاعبين.';
+  $('#creatorGrid').innerHTML='<div class="notice">صناع المحتوى هيظهروا هنا بعد اتصال الموقع بالبوت.</div>';if($('#teamGrid'))$('#teamGrid').innerHTML='<div class="notice">فريق NEXUS هيظهر هنا بعد اتصال الموقع.</div>';
   renderRules([]);
   $('#jobsGrid').innerHTML='<div class="notice">الوظائف هتظهر بعد استعادة الاتصال.</div>';
   $('#newsGrid').innerHTML='<div class="notice">تعذر تحميل الأخبار حاليًا.</div>';
@@ -197,7 +198,7 @@ function renderPublic(){
   $('#aboutText').textContent=pub.settings.aboutText;
   renderRules(pub.settings.rules || []);
 
-  const logoSrc='legend-mark.png?v=19';
+  const logoSrc='nexus-logo.png?v=19';
   // Keep the local logo visible while an optional custom URL loads in the background.
   const logoUrl=new URL(logoSrc,location.href).href;
   const logoTargets=[...document.querySelectorAll('[data-turbo-logo]')].filter(img=>img.src!==logoUrl);if(logoTargets.length){const preload=new Image();preload.decoding='async';preload.onload=()=>logoTargets.forEach(img=>{img.src=logoUrl;});preload.src=logoUrl;}
@@ -215,14 +216,14 @@ function renderPublic(){
   }
 
   const team=Array.isArray(pub.teamMembers)?pub.teamMembers:[];
-  const teamRanks=['Founder','Hight Mangment','LE Team'];
-  function displayRank(rank){const key=String(rank||'').trim().toLowerCase().replace(/[^a-z]/g,'');if(['owner','founder','cofounder'].includes(key))return 'Founder';if(['hightmangment','highmanagement','hightmanagement','manager','management'].includes(key))return 'Hight Mangment';return 'LE Team';}
+  const teamRanks=['Founder','Hight Mangment','NEXUS Team'];
+  function displayRank(rank){const key=String(rank||'').trim().toLowerCase().replace(/[^a-z]/g,'');if(['owner','founder','cofounder'].includes(key))return 'Founder';if(['hightmangment','highmanagement','hightmanagement','manager','management'].includes(key))return 'Hight Mangment';return 'NEXUS Team';}
   if($('#teamGrid')){
-    $('#teamGrid').innerHTML=teamRanks.map((rank,group)=>{const members=team.filter(m=>displayRank(m.rank)===rank).sort((a,b)=>(a.order||0)-(b.order||0));return `<section class="team-rank-group"><div class="team-rank-heading"><span>0${group+1}</span><h3>${rank}</h3><small>${members.length} أعضاء</small></div><div class="team-rank-cards">${members.length?members.map(m=>`<article class="team-card"><div class="team-photo"><img src="${esc(m.image||logoSrc)}" alt="${esc(m.name||'Legend Team')}" loading="lazy" decoding="async"></div><div class="team-info"><h3 data-no-translate>${esc(m.name||'')}</h3><b>${rank}</b></div></article>`).join(''):'<p class="team-group-empty">لم يتم إضافة أعضاء لهذه الرتبة بعد.</p>'}</div></section>`}).join('');
+    $('#teamGrid').innerHTML=teamRanks.map((rank,group)=>{const members=team.filter(m=>displayRank(m.rank)===rank).sort((a,b)=>(a.order||0)-(b.order||0));return `<section class="team-rank-group"><div class="team-rank-heading"><span>0${group+1}</span><h3>${rank}</h3><small>${members.length} أعضاء</small></div><div class="team-rank-cards">${members.length?members.map(m=>`<article class="team-card"><div class="team-photo"><img src="${esc(m.image||logoSrc)}" alt="${esc(m.name||'NEXUS Team')}" loading="lazy" decoding="async"></div><div class="team-info"><h3 data-no-translate>${esc(m.name||'')}</h3><b>${rank}</b></div></article>`).join(''):'<p class="team-group-empty">لم يتم إضافة أعضاء لهذه الرتبة بعد.</p>'}</div></section>`}).join('');
   }
 
   const news=Array.isArray(pub.settings.news)?pub.settings.news:[];
-  if($('#newsGrid'))$('#newsGrid').innerHTML=news.length?[...news].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).map(n=>`<article class="news-card"><small>LEGEND NEWS</small><h3>${esc(n.title)}</h3><p>${esc(n.body)}</p><time>${new Date(n.createdAt||Date.now()).toLocaleDateString(window.legendLocale?.()||'ar-EG')}</time></article>`).join(''):'<div class="notice">لا توجد أخبار مضافة حاليًا.</div>';
+  if($('#newsGrid'))$('#newsGrid').innerHTML=news.length?[...news].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).map(n=>`<article class="news-card"><small>NEXUS NEWS</small><h3>${esc(n.title)}</h3><p>${esc(n.body)}</p><time>${new Date(n.createdAt||Date.now()).toLocaleDateString(window.legendLocale?.()||'ar-EG')}</time></article>`).join(''):'<div class="notice">لا توجد أخبار مضافة حاليًا.</div>';
   $('#creatorGrid').innerHTML=pub.creators.length?pub.creators.map(c=>`<a class="creator" href="${esc(c.url)}" target="_blank" rel="noopener"><img src="${esc(c.image||'')}" alt="${esc(c.name)}"><div class="meta"><h3>${esc(c.name)}</h3>${c.isLive?'<span class="live">● LIVE</span>':'<span class="offline">OFFLINE</span>'}</div></a>`).join(''):'<div class="notice">هيتم إضافة صناع المحتوى من لوحة التحكم.</div>';
   $('#applyState').textContent=pub.settings.applicationsOpen?'التقديم مفتوح الآن':'التقديم مغلق حاليًا';
   renderJobs();window.legendCreatorPublic?.();
@@ -252,7 +253,7 @@ function renderApply(){
   syncApplicationLabels();
   const box=$('#applyBox');
   if(!token){
-    box.innerHTML=`<div class="apply-launch-card"><div class="apply-launch-copy"><span>LEGEND ENTRY</span><h3>ابدأ تقديم Legend RP</h3><p>سجّل بحساب Discord الأول علشان التقديم يرتبط بحسابك.</p></div><button class="btn primary apply-launch-btn" type="button" onclick="oauthLogin()">تسجيل الدخول بـ Discord</button></div>`;
+    box.innerHTML=`<div class="apply-launch-card"><div class="apply-launch-copy"><span>NEXUS ENTRY</span><h3>ابدأ تقديم NEXUS RP</h3><p>سجّل بحساب Discord الأول علشان التقديم يرتبط بحسابك.</p></div><button class="btn primary apply-launch-btn" type="button" onclick="oauthLogin()">تسجيل الدخول بـ Discord</button></div>`;
     return;
   }
   // صفحة واحدة فقط: لو فيه تقديم محفوظ نعرض حالته هنا بدل وجود صفحة حالة منفصلة.
@@ -268,7 +269,7 @@ function renderApply(){
     box.innerHTML='<div class="notice">التقديم مغلق حاليًا من الإدارة.</div>';
     return;
   }
-  box.innerHTML=`<div class="apply-launch-card"><div class="apply-launch-copy"><span>LEGEND ENTRY</span><h3>جاهز تبدأ شخصيتك؟</h3><p>اختار نوع الشخصية الأول، وبعدها هيفتح نموذج التقديم في صفحة مستقلة.</p></div><button class="btn primary apply-launch-btn" type="button" onclick="openApplicationPortal()">ابدأ التقديم</button></div>`;
+  box.innerHTML=`<div class="apply-launch-card"><div class="apply-launch-copy"><span>NEXUS ENTRY</span><h3>جاهز تبدأ شخصيتك؟</h3><p>اختار نوع الشخصية الأول، وبعدها هيفتح نموذج التقديم في صفحة مستقلة.</p></div><button class="btn primary apply-launch-btn" type="button" onclick="openApplicationPortal()">ابدأ التقديم</button></div>`;
 }
 function roleCards(){return CHARACTER_TYPES.map(c=>`<button type="button" class="character-card" onclick="chooseCharacter('${c.id}')"><div class="character-visual character-${c.id}"><span>${c.icon}</span><i></i></div><div class="character-meta"><small>${c.sub}</small><b>${c.name}</b><p>${c.desc}</p></div><em>اختيار</em></button>`).join('')}
 window.openApplicationPortal=openApplicationPortal;
@@ -315,7 +316,7 @@ function countdown(){const end=Date.now()+me.waitMs;const tick=()=>{const el=$('
 function statusVisual(status){
   const cfg={
     pending:['قيد المراجعة','طلبك وصل للإدارة','clock'],voice_review:['قيد مراجعة المقابلة','قرار المقابلة بيتراجع حاليًا','clock'],
-    pre_accepted:['مقبول مبدئيًا','استعد للمرحلة الصوتية','check'],voice_passed:['تم القبول','أهلًا بيك في Legend RP','check'],
+    pre_accepted:['مقبول مبدئيًا','استعد للمرحلة الصوتية','check'],voice_passed:['تم القبول','أهلًا بيك في NEXUS RP','check'],
     rejected:['تم الرفض','راجع السبب وقدّم مرة تانية بعد المدة','x'],voice_rejected:['رفض المقابلة','تقدر تحاول مرة تانية حسب النظام','x'],banned:['محظور','الحساب موقوف من التقديم','ban']
   }[status]||['حالة التقديم','تابع قرار الإدارة','clock'];
   const icon=cfg[2]==='check'?'<path d="M23 49l16 16 34-38"/>':cfg[2]==='x'?'<path d="M29 29l42 42M71 29L29 71"/>':cfg[2]==='ban'?'<circle cx="50" cy="50" r="28"/><path d="M30 70L70 30"/>':'<circle cx="50" cy="50" r="29"/><path d="M50 31v20l14 9"/>';
@@ -409,7 +410,7 @@ function staffCard(x,canRemove=false){
 
 function publicTeamCard(m){
   return `<div class="admin-team-row">
-    <img src="${esc(m.image||'turbo-logo.png?v=24')}" alt="${esc(m.name||'')}">
+    <img src="${esc(m.image||'nexus-logo.png?v=24')}" alt="${esc(m.name||'')}">
     <div><b>${esc(m.name||'')}</b><span>${esc(m.rank||'')}</span></div>
     <button class="danger" type="button" onclick="deleteTeamMember('${esc(m.id)}')">حذف</button>
   </div>`;
@@ -452,7 +453,7 @@ async function renderAdmin(){
     </div>`:'';
 
   $('#adminBox').innerHTML=`<div class="admin-dashboard">
-    <div class="admin-topline"><div><span>LEGEND CONTROL</span><h3>لوحة التحكم</h3></div><div class="admin-viewer">${viewerLabel}</div></div>
+    <div class="admin-topline"><div><span>NEXUS CONTROL</span><h3>لوحة التحكم</h3></div><div class="admin-viewer">${viewerLabel}</div></div>
     <div class="admin-summary"><div class="admin-stat"><b>${st.applications.length}</b><span>كل التقديمات</span></div><div class="admin-stat"><b>${st.applications.filter(a=>a.status==='pending').length}</b><span>قيد المراجعة</span></div><div class="admin-stat"><b>${st.applications.filter(a=>['pre_accepted','voice_review'].includes(a.status)).length}</b><span>المرحلة الثانية</span></div><div class="admin-stat"><b>${st.applications.filter(a=>a.status==='voice_passed').length}</b><span>مقبولين نهائيًا</span></div></div>
     <div class="admin-control-grid">
       <div class="card admin-settings-card whitelist-admin"><small>WHITELIST CONTROL</small><h3>فتح وقفل تقديم الوايت ليست</h3><p>الحالة الحالية: <b>${st.settings.applicationsOpen?'مفتوح':'مغلق'}</b></p><button class="${st.settings.applicationsOpen?'danger':'btn primary'}" onclick="toggleApps(${!st.settings.applicationsOpen})">${st.settings.applicationsOpen?'قفل التقديم':'فتح التقديم'}</button></div>
@@ -496,7 +497,7 @@ async function renderAdmin(){
 
       <div class="card admin-content-settings">
         <h3>محتوى الموقع</h3>
-        <p>عدّل نبذة Legend والقوانين الإضافية بدون لمس الكود.</p>
+        <p>عدّل نبذة NEXUS والقوانين الإضافية بدون لمس الكود.</p>
         <form id="siteSettingsForm">
           <div class="field"><label>من نحن</label><textarea name="aboutText">${esc(st.settings.aboutText||'')}</textarea></div>
           <div class="field"><label>قوانين إضافية — كل قانون في سطر</label><textarea name="rules">${esc((st.settings.rules||[]).join('\n'))}</textarea></div>
@@ -511,7 +512,7 @@ async function renderAdmin(){
         <form id="brandingForm" class="form-grid">
           <div class="field full"><label>رابط اللوجو</label><input name="logoImage" value="${esc(st.settings.logoImage||'')}" placeholder="https://.../logo.png"></div>
           <div class="field full"><label>أو ارفع لوجو من الجهاز — حد أقصى 650KB</label><input id="logoFileInput" name="logoFile" type="file" accept="image/png,image/jpeg,image/webp"></div>
-          <div class="branding-preview"><img src="${esc(st.settings.logoImage||'turbo-logo.png?v=24')}" alt="Legend logo preview"><span>معاينة اللوجو</span></div>
+          <div class="branding-preview"><img src="${esc(st.settings.logoImage||'nexus-logo.png?v=24')}" alt="NEXUS logo preview"><span>معاينة اللوجو</span></div>
           <div class="field full"><label>رابط خلفية المدينة</label><input name="cityBackground" value="${esc(st.settings.cityBackground||'')}" placeholder="https://.../city.jpg"></div>
           <small class="field-hint">الخلفية نفسها بتتحرك تلقائيًا بحركة بطيئة. لو سيبت الرابط فاضي هتظهر خلفية Skyline متحركة من الموقع.</small>
           <button class="smallbtn" type="submit">حفظ الهوية</button>
@@ -520,11 +521,11 @@ async function renderAdmin(){
 
       <div class="card admin-public-team-card">
         <div class="admin-card-kicker">PUBLIC TEAM</div>
-        <h3>فريق Legend الظاهر في الموقع</h3>
+        <h3>فريق NEXUS الظاهر في الموقع</h3>
         <p><b>ده منفصل تمامًا عن Admin / Manager / Owner.</b> اختار رتبة الشخص المعروضة في صفحة الفريق.</p>
         <form id="publicTeamForm" class="form-grid">
           <div class="field"><input name="name" placeholder="اسم الشخص" required></div>
-          <div class="field"><label>الرتبة</label><select name="rank" required><option value="Founder">Founder</option><option value="Hight Mangment">Hight Mangment</option><option value="LE Team">LE Team</option></select></div>
+          <div class="field"><label>الرتبة</label><select name="rank" required><option value="Founder">Founder</option><option value="Hight Mangment">Hight Mangment</option><option value="NEXUS Team">NEXUS Team</option></select></div>
           <div class="field full"><input name="image" placeholder="رابط الصورة" required></div>
           <div class="field"><input name="order" type="number" value="${(st.teamMembers||[]).length+1}" min="0" placeholder="الترتيب"></div>
           <button class="btn primary" type="submit">إضافة للفريق</button>
@@ -535,7 +536,7 @@ async function renderAdmin(){
       <div class="card admin-bot-sync-card">
         <div class="admin-card-kicker">DISCORD BOT SYNC</div>
         <h3>نظام البوت المتصل بالموقع</h3>
-        <p>الموقع مربوط بنفس نظام Legend Bot: نوع الشخصية، مراجعة التقديم، المقابلة الصوتية، الرولات، سجل النشاط، النسخ الاحتياطي، وStaff Panel.</p>
+        <p>الموقع مربوط بنفس نظام NEXUS Bot: نوع الشخصية، مراجعة التقديم، المقابلة الصوتية، الرولات، سجل النشاط، النسخ الاحتياطي، وStaff Panel.</p>
         <button class="smallbtn" type="button" onclick="checkJobDiscordConfig()">فحص رومات Discord</button><div class="bot-feature-grid">
           <span>نوع الشخصية</span>
           <span>مراجعة Discord</span>
@@ -556,7 +557,7 @@ async function renderAdmin(){
     <div class="admin-grid"><div class="card"><h3>إضافة صانع محتوى</h3><form id="creatorForm" class="form-grid"><div class="field"><input name="name" placeholder="الاسم" required></div><div class="field"><input name="order" type="number" placeholder="الترتيب" value="1"></div><div class="field full"><input name="image" placeholder="لينك الصورة" required></div><div class="field full"><input name="url" placeholder="لينك الصفحة" required></div><div class="field"><select name="platform"><option value="youtube">YouTube</option><option value="twitch">Twitch</option><option value="other">Other</option></select></div><div class="field"><input name="platformId" placeholder="Channel ID / Twitch login"></div><button class="btn primary" type="submit">إضافة</button></form><div class="list">${st.creators.map(c=>`<div class="item"><span>${esc(c.name)} ${c.isLive?'🔴':''}</span><button class="danger" onclick="delCreator('${c.id}')">حذف</button></div>`).join('')}</div></div><div class="card"><h3>مواعيد المقابلات</h3><form id="slotForm"><div class="field"><input name="at" type="datetime-local" required></div><div class="field"><input name="note" placeholder="ملاحظة / روم المقابلة"></div><br><button class="btn primary" id="addSlotBtn" type="submit">إضافة موعد</button></form><div class="list">${st.interviewSlots.map(s=>`<div class="item"><span>${new Date(s.at).toLocaleString(window.legendLocale?.()||'ar-EG')} ${s.bookedBy?'• محجوز':''}</span>${!s.bookedBy?`<button class="danger" onclick="delSlot('${s.id}')">حذف</button>`:''}</div>`).join('')}</div></div></div>
     <div id="applicationReview" class="application-review hidden"></div>
     <div class="card staff-directory-card">
-      <div class="staff-directory-head"><div><span>STAFF DIRECTORY</span><h3>إدارة Legend</h3></div><span class="staff-count">${(st.staffDirectory||[]).length} إداري</span></div>
+      <div class="staff-directory-head"><div><span>STAFF DIRECTORY</span><h3>إدارة NEXUS</h3></div><span class="staff-count">${(st.staffDirectory||[]).length} إداري</span></div>
       <p>القائمة دي بتظهر فقط للـ Admin والـ Manager والـ Owner.</p>
       <div class="staff-directory-grid">${(st.staffDirectory||[]).map(a=>staffCard(a,false)).join('')||'<div class="notice">لا توجد بيانات إداريين.</div>'}</div>
     </div>
@@ -753,8 +754,8 @@ window.addEventListener('hashchange',()=>auditEvent('navigate',{hash:location.ha
 const JOB_META={
   police:{name:'تقديم الشرطة',code:'LSPD 01',eyebrow:'LOS SANTOS POLICE DEPARTMENT',desc:'لما تنتهي كل الخيارات، أنت الأمن الأخير.',icon:'◈'},
   ems:{name:'تقديم المستشفى',code:'EMS 02',eyebrow:'EMERGENCY MEDICAL SERVICES',desc:'حياة تحتاج من ينقذها.',icon:'✚'},
-  mechanic:{name:'تقديم الميكانيكي',code:'MECH 03',eyebrow:'LEGEND MECHANIC DEPARTMENT',desc:'اختار ورشتك وابدأ شغلك داخل المدينة.',icon:'⚙'},
-  gang:{name:'تقديم العصابات',code:'GANG 04',eyebrow:'LEGEND GANGS',desc:'تقديم العصابات يتم من خلال Discord الرسمي.',icon:'◆',external:true,url:'https://discord.gg/dDPEuwzzQ'}
+  mechanic:{name:'تقديم الميكانيكي',code:'MECH 03',eyebrow:'NEXUS MECHANIC DEPARTMENT',desc:'اختار ورشتك وابدأ شغلك داخل المدينة.',icon:'⚙'},
+  gang:{name:'تقديم العصابات',code:'GANG 04',eyebrow:'NEXUS GANGS',desc:'تقديم العصابات يتم من خلال Discord الرسمي.',icon:'◆',external:true,url:'https://discord.gg/dDPEuwzzQ'}
 };
 function renderJobs(){
   const grid=$('#jobsGrid');if(!grid)return;

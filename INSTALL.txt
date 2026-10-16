@@ -1,6 +1,8 @@
-LEGEND WEBSITE V10
-Upload all files in this archive to the root of legend_Website replacing the previous website files. Keep the existing bot V9 and its settings.
-This version adds legend-layout.css and the original loading-screen L as legend-mark.png.
-Changes: regular-flow sections, responsive header, consistent cards and spacing, existing application and creator endpoints retained.
+NEXUS WEBSITE — الملفات في جذر الأرشيف
 
-Community update: Install matching bot and server bridge. Website layout and Legend L logo from this version are preserved.
+ارفع كل الملفات داخل مستودع Nexus_Website واستبدل النسخة القديمة.
+رابط الموقع: https://kivenemad538-collab.github.io/Nexus_Website/
+فعّل GitHub Pages على الفرع والمجلد الذي يحتوي index.html.
+config.js يحتفظ برابط API السابق. غيّره فقط لو نقلت استضافة البوت.
+ارفع البوت المرفق أيضاً حتى تعمل صلاحيات الأونرز الثلاثة والهوية الجديدة في رسائل Discord.
+لم يتم نشر هذه الملفات تلقائياً على GitHub.
