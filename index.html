@@ -21,14 +21,17 @@
   <meta name="twitter:title" content="NEXUS RP — Roleplay">
   <meta name="twitter:description" content="NEXUS RP — سيرفر رول بلاي عربي.">
   <meta name="twitter:image" content="https://nexus-rp538.github.io/Nexus_Website/nexus-banner.png">
-  <link rel="stylesheet" href="style.css?v=nexus4">
+  <link rel="stylesheet" href="style.css?v=nexus6">
 
 
 
-<link rel="preload" as="image" href="nexus-logo.png?v=nexus4">
-<link rel="stylesheet" href="nexus-layout.css?v=nexus4">
+<link rel="preload" as="image" href="nexus-logo.png?v=nexus6">
+<link rel="stylesheet" href="nexus-layout.css?v=nexus6">
 <link rel="icon" type="image/png" href="nexus-logo.png?v=4">
-<link rel="stylesheet" href="nexus-brand.css?v=nexus4">
+<link rel="stylesheet" href="nexus-brand.css?v=nexus6">
+<link rel="preload" href="Tajawal-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="nexus-premium.css?v=nexus6">
+<script>try{const p=JSON.parse(localStorage.getItem('nexus_personal_preferences_v6')||'{}');for(const k of ['theme','motion','size','density','cards','contrast'])if(typeof p[k]==='string')document.documentElement.dataset[k]=p[k];}catch{}</script>
 </head>
 
 <body class="legend-v8">
@@ -51,6 +54,7 @@
     <nav id="nav"><a href="#home">المدينة</a><a href="#jobs">الوظائف</a><a id="applicationNavLink" href="#apply">التقديم</a><a href="#rules">القوانين</a><a href="#news">الأخبار</a><a href="#team">الفريق</a><a href="#creators">اللايفات</a>
     </nav>
     <div class="top-actions">
+      <button id="personalSettingsButton" class="personal-settings-trigger" type="button" aria-label="إعدادات مظهري" title="إعدادات مظهري" aria-haspopup="dialog"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="currentColor"/><circle cx="15" cy="17" r="3" fill="currentColor"/></svg></button>
       <button id="languageToggle" type="button" aria-label="تغيير اللغة">اللغة: العربية</button>
       <button id="menu" class="menu-btn" type="button">☰</button>
       <a id="loginBtn" class="discord-btn" href="https://botsturbo-production.up.railway.app/auth/discord">
@@ -64,6 +68,7 @@
 <div id="pageHeading" class="page-heading" hidden><a href="#home">المدينة /</a><span id="pageName"></span></div>
     
 <section id="home" class="cinema-hero">
+<div class="premium-hero-scene" aria-hidden="true"></div><div class="premium-hero-vignette" aria-hidden="true"></div>
 <div class="nexus-hero-grid">
  <div class="cinema-copy"><div class="hero-badges"><span>NEXUS ROLEPLAY</span><span>مجتمع رول بلاي عربي</span></div>
  <h1><span class="cinema-title" data-no-translate>NEXUS</span><em>مدينتنا.<br><span>حكايتك أنت.</span></em></h1>
@@ -71,9 +76,9 @@
  <div class="hero-actions"><a class="btn primary" href="#apply">قدّم على دخول المدينة ↖</a><a class="btn ghost" href="#rules">اعرف القوانين</a></div>
  <div class="server-state"><i></i><span id="applyState">NEXUS • بوابتك للمدينة</span></div><div id="liveServerStatus" class="live-server-status" role="status"></div>
  </div>
- <div class="nexus-hero-art"><div class="nexus-art-index">N / 01</div><picture><source media="(prefers-reduced-motion: reduce)" srcset="nexus-logo.png?v=4"><img src="nexus-motion.webp?v=4" alt="شعار NEXUS المتحرك بالأحمر والفضي" width="512" height="570" fetchpriority="high"></picture><div class="nexus-art-caption"><b>NEXUS</b><span>MAKE YOUR NEXT MOVE.</span></div></div>
+ <div class="nexus-hero-art premium-emblem"><div class="nexus-art-index">N / 01</div><picture><source media="(prefers-reduced-motion: reduce)" srcset="nexus-logo.png?v=4"><img src="nexus-motion.webp?v=4" alt="شعار NEXUS المتحرك بالأحمر والفضي" width="512" height="570" fetchpriority="high"></picture><div class="nexus-art-caption"><b>NEXUS</b><span>MAKE YOUR NEXT MOVE.</span></div></div>
 </div>
-<div class="nexus-banner"><img src="nexus-banner.png?v=4" alt="NEXUS ROLEPLAY" width="2048" height="683" decoding="async"></div>
+<div class="nexus-banner premium-banner"><img src="nexus-banner.png?v=4" alt="NEXUS ROLEPLAY" width="2048" height="683" decoding="async"></div>
 <div class="cinema-bottom">YOUR CITY. YOUR STORY.<span>NEXUS ROLEPLAY © 2026</span></div>
 </section>
 
@@ -193,13 +198,29 @@
  document.addEventListener('pointerover',e=>{if(fx&&e.pointerType==='mouse'&&e.target.closest('a,button')&&performance.now()-lastHover>180){lastHover=performance.now();clickSound();}});
 })();
 </script>
-  <script src="config.js?v=nexus4"></script><script src="app.js?v=nexus4"></script>
-<script src="store.js?v=nexus4"></script>
+  <script src="config.js?v=nexus6"></script><script src="app.js?v=nexus6"></script>
+<script src="store.js?v=nexus6"></script>
 
-<script src="nexus-cinema.js?v=nexus4"></script>
-<script src="nexus-i18n.js?v=nexus4"></script>
-<script src="community-ui.js?v=nexus4"></script>
-<script src="creator-ui.js?v=nexus4"></script>
-<script src="nexus-experience.js?v=nexus4"></script>
+<script src="nexus-cinema.js?v=nexus6"></script>
+<script src="nexus-i18n.js?v=nexus6"></script>
+<script src="community-ui.js?v=nexus6"></script>
+<script src="creator-ui.js?v=nexus6"></script>
+<script src="nexus-experience.js?v=nexus6"></script>
+<dialog id="personalSettings" class="personal-settings" aria-labelledby="personalSettingsTitle">
+ <div class="prefs-heading"><div><small>MAKE IT YOURS</small><h2 id="personalSettingsTitle">الموقع على ذوقك.</h2></div><button id="closePersonalSettings" type="button" aria-label="إغلاق الإعدادات">✕</button></div>
+ <p class="prefs-intro">اختياراتك بتتحفظ على المتصفح ده، وبتغيّر شكل الموقع عندك بس.</p>
+ <form id="personalPreferencesForm">
+ <fieldset><legend>الإضاءة</legend><div class="prefs-options"><label><input type="radio" name="theme" value="dark"> ليلي</label><label><input type="radio" name="theme" value="dim"> هادي</label><label><input type="radio" name="theme" value="light"> فاتح</label></div></fieldset>
+ <fieldset><legend>حجم الخط</legend><div class="prefs-options"><label><input type="radio" name="size" value="normal"> عادي</label><label><input type="radio" name="size" value="large"> كبير</label><label><input type="radio" name="size" value="larger"> أكبر</label></div></fieldset>
+ <fieldset><legend>عرض الشخصيات</legend><div class="prefs-options"><label><input type="radio" name="cards" value="grid"> كروت بصور</label><label><input type="radio" name="cards" value="list"> قائمة</label></div></fieldset>
+ <fieldset><legend>المسافات</legend><div class="prefs-options"><label><input type="radio" name="density" value="comfortable"> مريحة</label><label><input type="radio" name="density" value="compact"> مختصرة</label></div></fieldset>
+ <label class="prefs-switch"><span><b>حركة الموقع</b><small>حركة خفيفة للكروت والخلفية</small></span><input type="checkbox" name="motion"></label>
+ <label class="prefs-switch"><span><b>وضوح أعلى</b><small>حدود أوضح وتباين أقوى للنصوص</small></span><input type="checkbox" name="contrast"></label>
+ <div class="prefs-preview"><span>NEXUS / YOUR EXPERIENCE</span><h3>نفس المدينة، بطريقتك.</h3><p>شوف شكل الخط والألوان وأنت بتختار.</p></div>
+ <div class="prefs-footer"><button id="resetPersonalSettings" type="button">الإعدادات الأصلية</button><button id="donePersonalSettings" type="button" class="btn primary">تمام، كده حلو</button></div>
+ <p id="prefsSaved" class="prefs-saved" role="status" aria-live="polite"></p>
+ </form>
+</dialog>
+<script src="nexus-preferences.js?v=nexus6"></script>
 </body>
 </html>
