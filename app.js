@@ -1,4 +1,4 @@
-if(localStorage.getItem('nexusBrandVersion')!=='1'){sessionStorage.removeItem('legend_public_cache');localStorage.setItem('nexusBrandVersion','1');}
+if(localStorage.getItem('nexusBrandVersion')!=='4'){sessionStorage.removeItem('legend_public_cache');localStorage.setItem('nexusBrandVersion','4');}
 const RAW_API = String(window.TURBO_API || '').trim();
 const API_CONFIGURED = /^https:\/\//i.test(RAW_API) && !/YOUR-RAILWAY-DOMAIN/i.test(RAW_API);
 const API = API_CONFIGURED ? RAW_API.replace(/\/$/,'') : '';
@@ -185,7 +185,7 @@ async function init(){
 
 function renderOffline(msg='الموقع جاهز، لكن رابط Railway لسه محتاج يتضاف في config.js.'){
   $('#applyState').textContent='الربط غير مكتمل';
-  $('#aboutText').textContent='NEXUS RP هو سيرفر رول بلاي عربي يهتم بالسيناريوهات وجودة التجربة وتفاعل اللاعبين.';
+  $('#aboutText').textContent='أهلًا بيك في NEXUS. اعرف القوانين، جهّز شخصيتك، وقدّم على الدخول.';
   $('#creatorGrid').innerHTML='<div class="notice">صناع المحتوى هيظهروا هنا بعد اتصال الموقع بالبوت.</div>';if($('#teamGrid'))$('#teamGrid').innerHTML='<div class="notice">فريق NEXUS هيظهر هنا بعد اتصال الموقع.</div>';
   renderRules([]);
   $('#jobsGrid').innerHTML='<div class="notice">الوظائف هتظهر بعد استعادة الاتصال.</div>';
@@ -198,7 +198,7 @@ function renderPublic(){
   $('#aboutText').textContent=pub.settings.aboutText;
   renderRules(pub.settings.rules || []);
 
-  const logoSrc='nexus-logo.png?v=19';
+  const logoSrc=matchMedia('(prefers-reduced-motion: reduce)').matches?'nexus-logo.png?v=4':'nexus-motion.webp?v=4';
   // Keep the local logo visible while an optional custom URL loads in the background.
   const logoUrl=new URL(logoSrc,location.href).href;
   const logoTargets=[...document.querySelectorAll('[data-turbo-logo]')].filter(img=>img.src!==logoUrl);if(logoTargets.length){const preload=new Image();preload.decoding='async';preload.onload=()=>logoTargets.forEach(img=>{img.src=logoUrl;});preload.src=logoUrl;}
