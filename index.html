@@ -21,17 +21,18 @@
   <meta name="twitter:title" content="NEXUS RP — Roleplay">
   <meta name="twitter:description" content="NEXUS RP — سيرفر رول بلاي عربي.">
   <meta name="twitter:image" content="https://nexus-rp538.github.io/Nexus_Website/nexus-banner.png">
-  <link rel="stylesheet" href="style.css?v=nexus7">
+  <link rel="stylesheet" href="style.css?v=nexus8">
 
 
 
-<link rel="preload" as="image" href="nexus-logo.png?v=nexus7">
-<link rel="stylesheet" href="nexus-layout.css?v=nexus7">
+<link rel="preload" as="image" href="nexus-logo.png?v=nexus8">
+<link rel="stylesheet" href="nexus-layout.css?v=nexus8">
 <link rel="icon" type="image/png" href="nexus-logo.png?v=4">
-<link rel="stylesheet" href="nexus-brand.css?v=nexus7">
+<link rel="stylesheet" href="nexus-brand.css?v=nexus8">
 <link rel="preload" href="Tajawal-Regular.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="nexus-premium.css?v=nexus7">
+<link rel="stylesheet" href="nexus-premium.css?v=nexus8">
 <script>try{const p=JSON.parse(localStorage.getItem('nexus_personal_preferences_v6')||'{}');for(const k of ['theme','motion','size','density','cards','contrast'])if(typeof p[k]==='string')document.documentElement.dataset[k]=p[k];}catch{}</script>
+<link rel="stylesheet" href="nexus-scroll.css?v=nexus8">
 </head>
 
 <body class="legend-v8">
@@ -79,16 +80,21 @@
  <div class="nexus-hero-art premium-emblem"><div class="nexus-art-index">N / 01</div><picture><source media="(prefers-reduced-motion: reduce)" srcset="nexus-logo.png?v=4"><img src="nexus-motion.webp?v=4" alt="شعار NEXUS المتحرك بالأحمر والفضي" width="512" height="570" fetchpriority="high"></picture><div class="nexus-art-caption"><b>NEXUS</b><span>MAKE YOUR NEXT MOVE.</span></div></div>
 </div>
 <div class="nexus-banner premium-banner"><img src="nexus-banner.png?v=4" alt="NEXUS ROLEPLAY" width="2048" height="683" decoding="async"></div>
+<a class="hero-scroll-invitation" href="#cityJourney"><span>اسحب واكتشف المدينة</span><i aria-hidden="true">↓</i></a>
 <div class="cinema-bottom">YOUR CITY. YOUR STORY.<span>NEXUS ROLEPLAY © 2026</span></div>
 </section>
 
-<section id="cityJourney" class="city-journey" aria-label="رحلتك في NEXUS">
- <div class="journey-pin"><div class="journey-heading"><small>YOUR NEXT CHAPTER</small><h2>جاهز تبدأ؟<br><span>خدها خطوة خطوة.</span></h2><p>اعرف مدينتنا، جهّز شخصيتك، وقدّم.</p><div class="journey-track" aria-hidden="true"><i></i></div><a class="btn primary" href="#apply">ابدأ التقديم ↖</a></div>
- <div class="journey-stage"><div class="journey-panels">
- <article class="journey-panel active"><span>01 / YOUR CHARACTER</span><h3>مين شخصيتك؟<br>عرّفنا عليها.</h3><p>اكتب قصة من عندك، وفكّر شخصيتك جاية المدينة ليه وعايزة توصل لإيه.</p><b>خليك أنت صاحب القصة.</b></article>
- <article class="journey-panel"><span>02 / THE APPLICATION</span><h3>قدّم.<br>وتابع طلبك.</h3><p>سجّل بحساب ديسكورد، ابعت تقديمك، وتابع القرار وموعد المقابلة هنا.</p><b>التقديم، المراجعة، المقابلة.</b></article>
- <article class="journey-panel"><span>03 / THE CITY</span><h3>اختار طريقك.<br>وابني مكانك.</h3><p>اكتشف الأقسام والوظائف، واقرأ دليل المدينة قبل ما تبدأ رحلتك.</p><b>كل طريق بيحكي حكاية.</b></article>
- </div><div class="journey-dots" aria-hidden="true"><i class="active"></i><i></i><i></i></div></div></div>
+<section id="cityJourney" class="city-journey home-scroll-story" data-scroll-deck="home" data-axis="vertical" aria-label="اكتشف المدينة مع السحب">
+ <div class="scroll-sticky home-story-sticky">
+  <div class="scroll-deck-toolbar"><div><span>BEFORE YOUR FIRST CHAPTER</span><h2>قبل ما تبدأ حكايتك.</h2></div><div class="deck-controls"><button type="button" data-deck-prev aria-label="الخطوة السابقة">↑</button><span data-deck-count aria-live="polite">01 / 04</span><button type="button" data-deck-next aria-label="الخطوة التالية">↓</button></div></div>
+  <div class="home-story-canvas scroll-deck-canvas">
+   <article class="home-story-card" data-scene-card><div class="story-scene-art"><img src="nexus-city-hero.png" alt="مدينة NEXUS بالليل" width="1672" height="940" loading="lazy"></div><div class="story-scene-copy"><span>01 / THE CITY</span><h3>مش داخل تلعب دور.<br>داخل تعيش حكاية.</h3><p>ابدأ من الصفر، قابل ناس جديدة، وخلي كل قرار يفتح طريق. شخصيتك ليها أهداف وعيوب وحياة بتتغير مع اللي بيحصل حواليها.</p><a class="btn ghost" href="#about">اعرف مدينتنا ↗</a></div></article>
+   <article class="home-story-card" data-scene-card><div class="story-scene-art"><img src="character-police.png" alt="شخصية شرطي مرسومة" width="1024" height="1536" loading="lazy"></div><div class="story-scene-copy"><span>02 / THE RULEBOOK</span><h3>القوانين بتحمي<br>حكاية كل واحد.</h3><ul><li>حافظ على حياة شخصيتك وقت التهديد.</li><li>معلومة من برّه اللعبة؟ شخصيتك لسه متعرفهاش.</li><li>كمّل السيناريو، وارجع للإدارة بعده لو فيه مشكلة.</li></ul><a class="btn primary" href="#rules">اقرأ القوانين كاملة ↗</a></div></article>
+   <article class="home-story-card" data-scene-card><div class="story-scene-art"><img src="character-business.png" alt="شخصية رجل أعمال مرسومة" width="1024" height="1536" loading="lazy"></div><div class="story-scene-copy"><span>03 / YOUR CHARACTER</span><h3>كل طريق مختلف.<br>اختار بدايتك.</h3><p>شرطي، مسعف، ميكانيكي، محامي أو طريق تاني. فكّر شخصيتك جاية منين، إيه اللي بيحرّكها، وإيه هدفها في المدينة.</p><p class="story-small-note">اختيار المهنة في القصة مش تعيين رسمي في الوظيفة.</p><a class="btn ghost" href="#jobs">شوف الجهات المتاحة ↗</a></div></article>
+   <article class="home-story-card" data-scene-card><div class="story-scene-art"><img src="character-civilian.png" alt="شخصية مدنية مرسومة" width="1024" height="1536" loading="lazy"></div><div class="story-scene-copy"><span>04 / YOUR FIRST STEP</span><h3>دورك تكمّل<br>باقي القصة.</h3><p>سجّل بحساب Discord، اختار شخصيتك، واكتب قصتها وإجاباتك. تابع نتيجة تقديمك وموعد المقابلة من حسابك على الموقع.</p><a class="btn primary" href="#apply">يلا نبدأ التقديم ↗</a></div></article>
+  </div>
+  <div class="scroll-deck-footer"><span>المدينة · القوانين · الشخصية · التقديم</span><div class="deck-dots" aria-label="خطوات التعرف على المدينة"></div><span class="deck-scroll-hint">كمّل سحب ↓</span></div><div class="deck-progress" aria-hidden="true"><i></i></div>
+ </div>
 </section>
 <section id="cityPaths" class="city-paths"><div class="paths-pin"><div class="paths-heading"><small>CHOOSE YOUR PATH</small><h2>هتبدأ منين؟</h2><span>اختار المكان اللي يناسب شخصيتك</span></div><div class="paths-window"><div class="paths-track">
  <a href="#jobs" class="path-card"><span>01 / DEPARTMENTS</span><b>النظام.<br>والمسؤولية.</b><p>اكتشف تقديمات الشرطة والإسعاف والجهات المتاحة.</p><i>الوظائف ↖</i></a>
@@ -198,14 +204,14 @@
  document.addEventListener('pointerover',e=>{if(fx&&e.pointerType==='mouse'&&e.target.closest('a,button')&&performance.now()-lastHover>180){lastHover=performance.now();clickSound();}});
 })();
 </script>
-  <script src="config.js?v=nexus7"></script><script src="app.js?v=nexus7"></script>
-<script src="store.js?v=nexus7"></script>
+  <script src="config.js?v=nexus8"></script><script src="app.js?v=nexus8"></script>
+<script src="store.js?v=nexus8"></script>
 
-<script src="nexus-cinema.js?v=nexus7"></script>
-<script src="nexus-i18n.js?v=nexus7"></script>
-<script src="community-ui.js?v=nexus7"></script>
-<script src="creator-ui.js?v=nexus7"></script>
-<script src="nexus-experience.js?v=nexus7"></script>
+<script src="nexus-cinema.js?v=nexus8"></script>
+<script src="nexus-i18n.js?v=nexus8"></script>
+<script src="community-ui.js?v=nexus8"></script>
+<script src="creator-ui.js?v=nexus8"></script>
+<script src="nexus-experience.js?v=nexus8"></script>
 <dialog id="personalSettings" class="personal-settings" aria-labelledby="personalSettingsTitle">
  <div class="prefs-heading"><div><small>MAKE IT YOURS</small><h2 id="personalSettingsTitle">الموقع على ذوقك.</h2></div><button id="closePersonalSettings" type="button" aria-label="إغلاق الإعدادات">✕</button></div>
  <p class="prefs-intro">اختياراتك بتتحفظ على المتصفح ده، وبتغيّر شكل الموقع عندك بس.</p>
@@ -221,6 +227,7 @@
  <p id="prefsSaved" class="prefs-saved" role="status" aria-live="polite"></p>
  </form>
 </dialog>
-<script src="nexus-preferences.js?v=nexus7"></script>
+<script src="nexus-preferences.js?v=nexus8"></script>
+<script src="nexus-scroll.js?v=nexus8"></script>
 </body>
 </html>
